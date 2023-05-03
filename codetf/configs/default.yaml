@@ -1,0 +1,5 @@
+env:
+  # For default users
+  # cache_root: "~/.cache/codetf" 
+  # For internal use with persistent storage
+  cache_root: ".codetf" 
