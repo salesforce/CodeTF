@@ -12,7 +12,7 @@ from transformers import T5ForConditionalGeneration
 class CodeT5NL2Code(CodeT5BaseModel):
     
     PRETRAINED_MODEL_CONFIG_DICT = {
-        "base": "configs/t5/codet5_nl2code_base.yaml"
+        "codet5-base-nl2code": "configs/inference/t5/codet5-base-nl2code.yaml"
     }
 
     def __init__(self, model, class_config, tokenizer):

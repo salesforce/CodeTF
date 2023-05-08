@@ -1,0 +1,6 @@
+dataset:
+  codexglue_text_to_code: "code_x_glue_tc_text_to_code"
+  codexglue_java_to_csharp: "code_x_glue_cc_code_to_code_trans"
+  codexglue_code_to_text: "code_x_glue_ct_code_to_text"
+  codexglue_code_refinement: "code_x_glue_cc_code_refinement"
+ 

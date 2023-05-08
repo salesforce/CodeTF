@@ -45,7 +45,6 @@ class BaseModel(nn.Module):
         model_config = OmegaConf.load(model_class.get_class_config_path(model_card)).model
         default_config = OmegaConf.load(get_abs_path(model_class.DEFAULT_CONFIG_PATH)).env
 
-      
         model_cls = model_class.load_model_from_config(class_config=model_config, quantize=quantize, quantize_algo=quantize_algo)
 
         return model_cls

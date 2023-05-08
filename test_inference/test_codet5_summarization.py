@@ -4,9 +4,8 @@ sys.path.append(str(Path(".").absolute().parent))
 # sys.path.append("../")
 import torch
 from codetf.models import load_model
-# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-model = load_model(model_name="codet5_summarization", 
+model = load_model(model_name="codet5", 
                 model_type="base", task="sum", language="python", 
                 is_eval=True, quantize="int8", quantize_algo="bitsandbyte")
 

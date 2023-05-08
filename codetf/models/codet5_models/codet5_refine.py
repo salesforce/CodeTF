@@ -8,18 +8,17 @@ from codetf.models.codet5_models import CodeT5BaseModel
 from torch import nn
 from transformers import T5ForConditionalGeneration
 
-@registry.register_model("codet5_translate")
-class CodeT5Translation(CodeT5BaseModel):
+@registry.register_model("codet5_refine")
+class CodeT5Refine(CodeT5BaseModel):
     
     PRETRAINED_MODEL_CONFIG_DICT = {
-        "codet5-base-translate-cs-java": "configs/inference/t5/codet5-base-translate-cs-java.yaml",
-        "codet5-base-translate-java-cs": "configs/inference/t5/codet5-base-translate-java-cs.yaml"
+        "codet5-base-refine": "configs/inference/t5/codet5-base-refine.yaml",
     }
 
     def __init__(self, model, class_config, tokenizer):
         super().__init__()
 
-        self.task = "translation"
+        self.task = "refine"
         self.codet5_model = model
         self.tokenizer = tokenizer
         self.max_source_length = class_config.get("max_source_length")

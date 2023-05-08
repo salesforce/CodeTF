@@ -12,8 +12,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 class CodeGenNL2Code(GPTBaseModel):
     
     PRETRAINED_MODEL_CONFIG_DICT = {
-        "350M-nl": "configs/gpt/codegen_nl2code_350M-nl.yaml",
-        "2B-mono": "configs/gpt/codegen_nl2code_2B-mono.yaml",
+        "codegen-350M-nl": "configs/gpt/codegen_nl2code_350M-nl.yaml",
+        "codegen-2B-mono": "configs/gpt/codegen_nl2code_2B-mono.yaml",
     }
 
     def __init__(self, model, max_source_length, max_target_length, beam_size, tokenizer_path):

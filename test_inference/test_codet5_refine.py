@@ -4,9 +4,11 @@ sys.path.append(str(Path(".").absolute().parent))
 # sys.path.append("../")
 import torch
 from codetf.models import load_model
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-model = load_model(model_name="codet5", 
-                model_type="base", task="translate", language="java-cs", 
+
+model = load_model(model_name="codet5", task="refine",
+                model_type="base",
                 is_eval=True, quantize="int8", quantize_algo="bitsandbyte")
 
 code_snippets = """
@@ -23,7 +25,6 @@ code_snippets = """
                 }
     }
 """
+refined = model.predict([code_snippets])
 
-translated_code_snippets = model.predict([code_snippets])
-
-print(translated_code_snippets)
+print(refined)

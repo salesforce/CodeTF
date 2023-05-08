@@ -1,0 +1,30 @@
+hyperparameters:
+  dataloader_drop_last: True
+  evaluation_strategy: "epoch"
+  save_strategy: "epoch"
+  logging_strategy: "epoch"
+  num_train_epochs: 3
+  auto_find_batch_size: True
+  batch_size: 4
+  max_steps: 1000
+  eval_steps: 100
+  save_steps: 1000
+  logging_steps: 100
+  per_device_train_batch_size: 8
+  per_device_eval_batch_size: 8
+  learning_rate: 5e-6
+  lr_scheduler_type: "cosine"
+  warmup_steps: 2000
+  gradient_accumulation_steps: 4
+  gradient_checkpointing: False
+  sharded_ddp: False
+  fsdp: True
+  weight_decay: 0.001
+  run_name: "CodeT5-seq2seq-fine-tuned"
+  ddp_find_unused_parameters: False
+  fp16: True
+  num_workers: 4
+  max_prediction_length: 256
+  beam_size: 2
+  max_grad_norm: 5.0
+  adam_epsilon : 1e-06

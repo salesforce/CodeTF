@@ -8,12 +8,15 @@ from codetf.models.base_model import BaseModel
 from codetf.models.codet5_models.codet5_summarization import CodeT5Summarization
 from codetf.models.codet5_models.codet5_nl2code import CodeT5NL2Code
 from codetf.models.codet5_models.codet5_translation import CodeT5Translation
+from codetf.models.codet5_models.codet5_refine import CodeT5Refine
 from codetf.models.gpt_models.codegen_nl2code import CodeGenNL2Code
+
 
 __all__ = [
     "CodeT5Summarization",
     "CodeT5NL2Code",
     "CodeT5Translation",
+    "CodeT5Refine",
     "CodeGenNL2Code"
 ]
 
@@ -69,11 +72,15 @@ def construct_model_card(model_name, model_type=None, task=None,
     model_card_name = "-".join(model_card_parts)
     return model_card_name
 
-def load_model(model_name, model_type="base", task="sum", 
-            dataset=None, language="python", is_eval=False, 
+def get_model_class_name(model_name, task):
+    class_name = f"{model_name}_{task}"
+    return class_name
+
+def load_model(model_name, model_type="base", task="sum",
+            dataset=None, language=None, is_eval=False, 
             quantize="int8", quantize_algo="bitsandbyte"):
-    model_cls = registry.get_model_class(model_name)
-    model_card = construct_model_card(card_name_mapper[model_name], model_type, task, dataset, language)
+    model_cls = registry.get_model_class(get_model_class_name(model_name,task))
+    model_card = construct_model_card(model_name, model_type, task, dataset, language)
     model = model_cls.from_pretrained(model_card=model_card, quantize=quantize, quantize_algo=quantize_algo)
     # model = model_cls.load_model_from_config(config)
     if is_eval:

@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(".").absolute().parent))
 # sys.path.append(str(Path(__file__).resolve().parents[2]))
-from codetf.code_utilities.apex.apex_code_utility import ApexCodeUtility
+from codetf.code_utility.apex.apex_code_utility import ApexCodeUtility
 
 
 def main():

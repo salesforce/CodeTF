@@ -51,7 +51,7 @@ class CodeT5BaseModel(BaseModel):
     def predict(self, sources):
         
         input_for_net = [' '.join(source.strip().split()).replace('\n', ' ') for source in sources]
-        if self.task in ["summarization", "translation", "nl2code"]:
+        if self.task in ["sum", "translate", "nl2code", "refine"]:
             output = self.forward_seq2seq(input_for_net)
        
         return output
