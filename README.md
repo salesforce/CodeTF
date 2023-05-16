@@ -7,7 +7,7 @@
 <p>
 
     
-# CodeTF - A Comprehensive Transformer-based Library for Revolutionizing Code Intelligence
+# CodeTF - A Comprehensive Transformer-based Library for Code LLM & Code Intelligence
 [![Code License](https://img.shields.io/badge/Code%20License-Apache_2.0-green.svg)](https://github.com/bdqnghi/CodeTF_personal/blob/main/LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -34,7 +34,19 @@ The current version of the library offers:
 - **Fine-Tuned Models**: We furnish fine-tuned checkpoints for 8+ downstream tasks.
 - **Utility to Manipulate Source Code**: We provide utilities to easily manipulate source code, such as user-friendly AST parsers in multiple languages.
 
+The following table shows the supported models with sizes and the tasks that the models support. This is a continuing effort and we are working on further growing the list.
     
+| Model      | Size                                      | Tasks                                                                                      |
+|------------|-------------------------------------------|--------------------------------------------------------------------------------------------|
+| CodeT5     | Small (125M), Medium (220M), Large (770M) | Pretrained, Code Sum, Code Generation, <br> Code Refinement, Defect Prediction, Clone Detection |
+| CodeT5+    | 220M, 770M, 2B, 6B, 16B                   | Pretrained                                                                                 |
+| CodeGen    | 350M, 2B, 6B, 16B                         | Pretrained                                                                                 |
+| SantaCoder | 1.1B                                      | Pretrained                                                                                 |
+| StarCoder  | 15.5B                                     | Pretrained                                                                                 |
+| GPT        | j (1.3B), j (6B), Neox (20B)             | Pretrained                                                                                 |
+| GPT-Neo    | 1.3B                                      | Pretrained                                                                                 |
+| BLOOM      | 560M, 1.1B, 1.7B, 3B, 7.1B                | Pretrained                                                                                 |
+
 
 ## Quick Start
 ### Install CodeTF:
@@ -59,17 +71,29 @@ cd CodeTF
 pip install -e .
 ```
 
-### Example usage to make inference
+### Inferencing Pipeline
+    
+The function ``load_model_pipeline()`` is an important function that loads our supported models and tasks. Below is an example on how to use this function to load ``codet5`` models and perform inference on specific tasks (code translation and code summarization in this case). There are a few notable arguments that need to consider:
+-  model_name: the name of the model, currently support ``codet5`` and ``causal-lm``. 
+-  model_type: type of model for each model name, e.g. ``base``, ``codegen-350M-mono``, ``j-6B``, etc.
+-  quantize: the precision level of quantized model, currently support ``int8``. More such as ``int16``, ``float16``, etc., will be supported in the future.
+-  quantize_algo: currently support ``bitsandbyte``.
+    
 ```python
 import sys
 from pathlib import Path
 sys.path.append(str(Path(".").absolute().parent))
-# sys.path.append("../")
 import torch
-from codetf.models import load_model
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+from codetf.models import load_model_pipeline
 
-model = load_model(name="codet5_summarization", model_type="base", is_eval=True, device=device)
+translation_model = load_model_pipeline(model_name="codet5", 
+                model_type="base", task="translate", language="java-cs", 
+                quantize="int8", quantize_algo="bitsandbyte")
+
+summarization_model = load_model_pipeline(model_name="codet5", 
+                model_type="base", task="sum", language="python", 
+                quantize="int8", quantize_algo="bitsandbyte")
+
 code_snippets = """
     void bubbleSort(int arr[])
     {
@@ -83,11 +107,81 @@ code_snippets = """
                     arr[j + 1] = temp;
                 }
     }
-
 """
-summarizations = model.predict([code_snippets])
-print(summarizations)
+
+translated_code_snippets = translation_model.predict([code_snippets])
+
+print(translated_code_snippets)
+
+summaries = summarization_model.predict([code_snippets])
+print(summaries)
 ```
+
+## Loading Preprocessed Data
+
+We provide ``dataloader`` for well-known datasets, such as the CodeXGLUE dataset so that it can be loaded easily.     
+
+``python
+import sys
+from pathlib import Path
+sys.path.append(str(Path(".").absolute().parent))
+from codetf.data_utility.codexglue_dataloader import CodeXGLUEDataLoader
+from transformers import RobertaTokenizer
+
+def main():
+    tokenizer = RobertaTokenizer.from_pretrained("Salesforce/codet5-base")
+    
+    dataloader = CodeXGLUEDataLoader(tokenizer=tokenizer)
+    train_dataset, test_dataset, val_dataset = dataloader.load_codexglue_code_to_text_dataset()
+    print(train_dataset[1])
+
+
+if __name__ == "__main__":
+    main() 
+``
+    
+    
+## Training Custom Model Using Our Dataloader and Trainer
+We also provide the users the ability to fine-tune their own LLMs for code using our utility.  Below is an example that use the CausalLMTrainer to fine-tune a code summarization model based on the CodeXGLUE dataset. First, the ``model_class`` is the class that contain the supported models in our pipeline. Next, the ``dataloader`` is an instance from our ``CodeXGLUEDataLoader``. Then we can load the dataset part that has been processed into appropriate format for training. Finally, the datasets are fed into the ``CausalLMTrainer`` with other parameters to fine-tune a custom model.
+        
+    
+```python
+import sys
+from pathlib import Path
+sys.path.append(str(Path(".").absolute().parent))
+import torch
+from codetf.trainer.causal_lm_trainer import CausalLMTrainer
+from codetf.data_utility.codexglue_dataloader import CodeXGLUEDataLoader
+from codetf.models import load_model_pipeline
+from codetf.performance.evaluate import Evaluator
+
+model_class = load_model_pipeline(model_name="causal-lm", task="pretrained",
+                model_type="codegen-350M-mono",
+                quantize=None, quantize_algo="bitsandbyte")
+
+
+dataloader = CodeXGLUEDataLoader(tokenizer=model_class.get_tokenizer())
+train_dataset, test_dataset, val_dataset = dataloader.load_codexglue_code_to_text_dataset()
+
+evaluator = Evaluator(metric="bleu", tokenizer=model_class.tokenizer)
+
+# peft can be in ["lora", "prefixtuning"]
+trainer = CausalLMTrainer(train_dataset=train_dataset, 
+                        validation_dataset=val_dataset, 
+                        peft=None,
+                        pretrained_model_or_path=model_class.get_model(),
+                        tokenizer=model_class.get_tokenizer())
+trainer.train()
+# trainer.evaluate(test_dataset=test_dataset)
+```
+
+
+
+
+
+
+    
+    
     
 ## Library Design
 <p align="center">
@@ -146,51 +240,7 @@ The following table shows the available models with their checkpoints and the su
     
 The following table shows the features comparison between CodeTF and other libraries, such as NaturalCC and HuggingFace Transformers. It is important to note that HuggingFace Transformers (HF-T) is a comprehensive library encompassing state-of-the-art language models and utilities for multiple research domains. The comparison provided in this Table focuses solely on the features related to the code domain, highlighting areas where HuggingFace Transformers may lack certain functionality. This is also a continuing effort and we are working on further growing the list.
 
-|                                            | CodeTF (Ours) | NaturalCC | HuggingFace-Transformers |
-|--------------------------------------------|---------------|-----------|------|
-| Unified Model and Dataset Interface        | ✓             |           |      |
-| Unified Interface for Parameter-Efficient Fine-Tuning | ✓ |           |      |
-| Unified Code Utility Interface for Multiple Programming Languages | ✓ |  |      |
-| Unified Interface for Evaluation           | ✓             |           |      |
-| Modular Library Design                     | ✓             |           | ✓    |
-| Pretrained Model Checkpoints               | ✓             | ✓         | ✓    |
-| Task-specific Finetuned Model Checkpoints  | ✓             | ✓         | ✓    |
-| **Tasks**                                  |               |           |      |
-| Code Summarization                         | ✓             | ✓         | ✓    |
-| Code Generation                            | ✓             | ✓         | ✓    |
-| Code Completion                            | ✓             | ✓         | ✓    |
-| Code Refinement                            | ✓             | ✓         | ✓    |
-| Defect Prediction                          | ✓             |           |      |
-| **Datasets**                               |               |           |      |
-| Human Eval                                 | ✓             |           |      |
-| MBPP                                       | ✓             |           |      |
-| APPS                                       | ✓             |           |      |
-| Py150                                      | ✓             | ✓         |      |
-| CodeXGLUE                                  | ✓             | ✓         |      |
 
-
-
-## More Use Cases
-### Load Preprocessed Datasets
-```python
-from codetf.datasets import load_dataset
-codexglue_codesum = load_dataset("codexglue_codesum")
-print(codexglue_codesum.keys())
-# dict_keys(['train', 'val', 'test'])
-print(len(codexglue_codesum["train"]))
-print(codexglue_codesum["train"][0])
-```
-
-### Fine-tuning Your Own Model on a Generative Task
-```python
-from codetf.datasets import load_dataset
-from codetf.trainer.codet5_seq2seq_trainer import CodeT5Seq2SeqTrainer
-
-codexglue_codesum = load_dataset("codexglue_codesum")
-
-codet5_trainer = CodeT5Seq2SeqTrainer()
-
-```
 
 ## Code utilities
 ### AST Parser in Multiple Languages
