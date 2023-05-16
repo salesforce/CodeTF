@@ -12,21 +12,14 @@
    <a href="https://www.python.org/downloads/release/python-380/">
   <img alt="license" src="https://img.shields.io/badge/python-3.8+-blue.svg"/>
   </a> 
- 
-</div>
-
-
-<div align="center">
-<a href="https://arxiv.org/abs/2209.09019">Technical Report</a>,
-<a href="">Jupyter Notebook Examples</a>,
-<a href="">Blog</a>
-</div>
-
-    
+  
 # CodeTF - A Comprehensive Transformer-based Library for Code LLM & Code Intelligence
+
+<!-- 
 [![Code License](https://img.shields.io/badge/Code%20License-Apache_2.0-green.svg)](https://github.com/bdqnghi/CodeTF_personal/blob/main/LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) -->
+ </div>   
     
 ## Table of Contents
   - [Introduction](#introduction)
@@ -284,15 +277,4 @@ print(function_name)
 ```
 
 This will print ```add_two_numbers``` as the function name.
-
-    
-    
-
-
-    
-## Feature Comparison
-    
-The following table shows the features comparison between CodeTF and other libraries, such as NaturalCC and HuggingFace Transformers. It is important to note that HuggingFace Transformers (HF-T) is a comprehensive library encompassing state-of-the-art language models and utilities for multiple research domains. The comparison provided in this Table focuses solely on the features related to the code domain, highlighting areas where HuggingFace Transformers may lack certain functionality. This is also a continuing effort and we are working on further growing the list.
-
-
 
