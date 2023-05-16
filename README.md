@@ -146,7 +146,7 @@ print(summaries)
 
 We provide ``dataloader`` for well-known datasets, such as the CodeXGLUE dataset so that it can be loaded easily.     
 
-``python
+```python
 import sys
 from pathlib import Path
 sys.path.append(str(Path(".").absolute().parent))
@@ -163,7 +163,7 @@ def main():
 
 if __name__ == "__main__":
     main() 
-``
+```
     
     
 ## Training Custom Model Using Our Dataloader and Trainer
