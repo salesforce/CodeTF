@@ -278,3 +278,24 @@ print(function_name)
 
 This will print ```add_two_numbers``` as the function name.
 
+
+## Technical Report and Citing CodeTF
+You can find more details in our [technical report](https://arxiv.org/abs/2209.09019).
+
+If you're using CodeTF in your research or applications, please cite using this BibTeX:
+```bibtex
+@misc{nghi2023codetf,
+      title={CodeTF: A Transformer-based Library for CodeLLM & Code Intelligence}, 
+      author={Nghi D. Q. Bui, Henry Le, Yue Wang, Akhilesh Deepak Gotmare, Junna Li, Steven Hoi.},
+      year={2023},
+      eprint={2209.09019},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
+
+## Contact us
+If you have any questions, comments or suggestions, please do not hesitate to contact us at codetf@salesforce.com.
+
+## License
+[BSD 3-Clause License](LICENSE.txt)
