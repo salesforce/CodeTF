@@ -5,6 +5,22 @@
     <img src="assets/logo.png" width="500"/>
     <br>
 <p>
+<div align="center">
+  <a href="https://opensource.org/licenses/BSD-3-Clause">
+  <img alt="license" src="https://img.shields.io/badge/License-BSD_3--Clause-blue.svg"/>
+  </a>
+   <a href="https://www.python.org/downloads/release/python-380/">
+  <img alt="license" src="https://img.shields.io/badge/python-3.8+-blue.svg"/>
+  </a> 
+ 
+</div>
+
+
+<div align="center">
+<a href="https://arxiv.org/abs/2209.09019">Technical Report</a>,
+<a href="">Jupyter Notebook Examples</a>,
+<a href="">Blog</a>
+</div>
 
     
 # CodeTF - A Comprehensive Transformer-based Library for Code LLM & Code Intelligence
