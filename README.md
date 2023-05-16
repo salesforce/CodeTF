@@ -57,7 +57,7 @@ The following table shows the supported models with sizes and the tasks that the
 | BLOOM      | 560M, 1.1B, 1.7B, 3B, 7.1B                | Pretrained                                                                                 |
 
 
-## Library Design
+## CodeTF Overview
 
 The figure below shows an overview of the library design, the modules that we have and the functionality of each module.
 <p align="center">
