@@ -48,6 +48,15 @@ The following table shows the supported models with sizes and the tasks that the
 | BLOOM      | 560M, 1.1B, 1.7B, 3B, 7.1B                | Pretrained                                                                                 |
 
 
+## Features Overview
+    
+Below is the overview of the features that we support.
+<p align="center">
+    <br>
+    <img src="assets/features.png" width="1000"/>
+    <br>
+<p>       
+    
 ## Quick Start
 ### Install CodeTF:
 
@@ -177,16 +186,12 @@ trainer.train()
 
 
 
-
-
-
-    
     
     
 ## Library Design
 <p align="center">
     <br>
-    <img src="assets/design.png" width="1000"/>
+    <img src="assets/overview.png" width="1000"/>
     <br>
 <p>   
     
