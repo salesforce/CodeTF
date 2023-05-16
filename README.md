@@ -79,7 +79,7 @@ Below is the overview of the features that we support.
 1. (Optional) Creating conda environment
 
 ```bash
-conda create -n lavis python=3.8
+conda create -n codetf python=3.8
 conda activate codetf
 ```
 
