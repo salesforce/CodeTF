@@ -157,11 +157,7 @@ class ASTParser():
         self.PARSER.set_language(language_build)
 
     def get_language(self, language=None):
-        # home = str("tree-sitter-prebuilts")
-        # home = str(Path.home())
-        # print(home)
         root = Path(__file__).parent.parent.parent
-        # print(root)
         cd = os.getcwd()
         plat = platform.system()     
         p = os.path.join(root, "codetf", "tree-sitter-prebuilts", plat)

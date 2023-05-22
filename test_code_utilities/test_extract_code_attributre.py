@@ -5,11 +5,9 @@ sys.path.append(str(Path(".").absolute().parent))
 from codetf.code_utility.apex.apex_code_utility import ApexCodeUtility
 
 
-
 apex_code_utility = ApexCodeUtility()
 
-sample_codes = 
-    """
+sample_code = """
     public class AccountWithContacts {
     // Method to fetch accounts and their related contacts
     public static void getAccountsWithContacts() {
