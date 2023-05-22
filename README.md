@@ -23,9 +23,9 @@
     
 ## Table of Contents
   - [Introduction](#introduction)
-  - [Installation](#installation)
+  - [Installation](#installation-guide)
   - [Getting Started](#getting-started)
-  - [Other Utilities](#other-utils)
+  - [Code Utilities](#code-utilities)
   - [License](#license)
 
 ## Introduction
@@ -38,11 +38,11 @@ The current version of the library offers:
 - **Fast Model Serving**: We support an easy-to-use interface for rapid inferencing with **pre-quantized models** (int8, int16, float16).
 - **Fine-Tuning Your Own Models with Custom Datasets**: We provide an API for quickly fine-tuning your own LLMs for code using SOTA techniques for **parameter-efficient fine-tuning** (HuggingFace PEFT).
 - **Supported Tasks**: nl2code, code summarization, code completion, code translation, code refinement, clone detection, defect prediction.
-- **Datasets+**: We have preprocessed well-known benchmarks (**Human-Eval, MBPP, CodeXGLUE, APPS**) and offer an easy-to-load feature for these datasets.
+- **Datasets+**: We have preprocessed well-known benchmarks (**Human-Eval, MBPP, CodeXGLUE, APPS, etc.**) and offer an easy-to-load feature for these datasets.
 - **Model Evaluator**: We provide interface to evaluate models on well-known benchmarks (e.g. Human-Eval) on popular metrics (e.g., pass@k) with little effort (**~15 LOCs**).
 - **Pretrained Models**: We supply pretrained checkpoints of state-of-the-art foundational language models of code (CodeBERT, CodeT5, CodeGen, CodeT5+, Incoder, StarCoder, etc.).
 - **Fine-Tuned Models**: We furnish fine-tuned checkpoints for 8+ downstream tasks.
-- **Utility to Manipulate Source Code**: We provide utilities to easily manipulate source code, such as user-friendly AST parsers in **15+ programming languages**.
+- **Utility to Manipulate Source Code**: We provide utilities to easily manipulate source code, such as user-friendly AST parsers (based on tree-sitter) in **15+ programming languages**, to extract important code features, such as function name, identifiers, etc.
 
 The following table shows the supported models with sizes and the tasks that the models support. This is a continuing effort and we are working on further growing the list.
     
@@ -159,7 +159,7 @@ Comparing to [this script from StarCoder](https://github.com/bigcode-project/sta
 
 
 ## Evaluate on Well-Known Benchmarks
-Want to reproduce results of well-kwown benchmarks, such as Human Eval, but do not get the same numbers reported in the original papers and the evaluation process is complicated? We also got you covered with easy-to-user interface. Below is a sample to evaluate Human Eval using pass@k (k=[1,10,100]) as the metric.
+Planning to reproduce the results of well-known benchmarks like ``Human-Eval``, but struggling with not achieving the same numbers as reported in the original papers? Worried about the complicated evaluation process? Don't worry, we've got you covered with an intuitive, easy-to-use interface. Here's a sample snippet demonstrating how to evaluate Human Eval using pass@k (k=[1,10,100]) as the metric:
 ```
 from codetf.models import load_model_pipeline
 from codetf.data_utility.human_eval_dataset import HumanEvalDataset
@@ -196,35 +196,41 @@ dataset = CodeXGLUEDataset(tokenizer=tokenizer)
 train, test, validation = dataset.load(subset="text-to-code")
 ```
 
+The ``train``, ``test``, ``validation`` are returned in form of [Pytorch tensor](https://pytorch.org/docs/stable/tensors.html) to provide the flexilbity for the users to wrap it into higher-lever wrapper for their own use cases.
 
-## Code utilities
+## Code Utilities
+In addition to providing utilities for LLMs, CodeTF also equips users with tools for effective source code manipulation. This is crucial in the code intelligence pipeline, where operations like parsing code into an Abstract Syntax Tree (AST) or extracting code attributes (such as function names or identifiers) are often required (CodeT5). These tasks can be challenging to execute, especially when setup and multi-language support is needed. Our code utility interface offers a streamlined solution, facilitating easy parsing and attribute extraction from code across 15+ languages.
+
+
 ### AST Parser in Multiple Languages
 
-CodeTF also provides AST parsers that supports multiple programming languages. Here is an example of how to parse Apex code into an AST:
+CodeTF includes AST parsers compatible with numerous programming languages. Here's an example showcasing the parsing of Apex code into an AST:
 ```python
-from codetf.code_ultilities import load_parser
+from codetf.code_utility.apex.apex_code_utility import ApexCodeUtility
 
-sfapex_parser = load_parser(language="apex")
+apex_code_utility = ApexCodeUtility()
 
-code_snippets = """
-    void bubbleSort(int arr[])
-    {
-        int n = arr.length;
-        for (int i = 0; i < n - 1; i++)
-            for (int j = 0; j < n - i - 1; j++)
-                if (arr[j] > arr[j + 1]) {
-                    // swap arr[j+1] and arr[j]
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                }
+sample_code = """
+    public class SampleClass {    
+        public Integer myNumber;
+        
+        **
+        * This is a method that returns the value of myNumber.
+        * @return An integer value
+        */
+        public Integer getMyNumber() {
+            // Return the current value of myNumber
+            return this.myNumber;
+        }
     }
-
 """
-ast = sfapex_parser.parse(code_snippets)
+ast = apex_code_utility.parse(sample_code)
+
+# This will print the tree-sitter AST object
+print(ast)
 ```
 
-Then you can traverse the tree using the interface from ```py-tree-sitter```
+Then you can traverse the tree using the interface from [py-tree-sitter](https://github.com/tree-sitter/py-tree-sitter
 ```
 root_node = ast.root_node
 assert root_node.type == 'module'
@@ -232,29 +238,48 @@ assert root_node.start_point == (1, 0)
 assert root_node.end_point == (3, 13)
 ```
 
+There are also other utilities for Java, Python, etc, that can perform the same operations. 
+
 ### Extract Code Attributes
 
 CodeTF provides an interface to easily extract code attributes. The following is a sample for extracting the function name of a Python function:
 
 ```python
-from codetf.code_ultilities import load_code_attributes_extractor
-
-extractor = load_code_attributes_extractor(language="python")
-
-code_snippets = """
-    def add_two_numbers(a, b):
-    {
-        return a + b
-    }
-
-"""
-
-function_name = extractor.extract_function_name(code_snippets)
-print(function_name)
+code_attributes = apex_code_utility.get_code_attributes(sample_code)
+print(code_attributes)
 ```
 
-This will print add_two_numbers as the function name. This can be useful for many applications, including code summarization, function navigation, and more.
+This will print:
+``
+{'class_names': ['AccountWithContacts'], 'method_names': ['getAccountsWithContacts'], 'comments': [], 'variable_names': ['acc', 'accounts', 'con', 'System', 'debug', 'Contacts', 'Id', 'Name', 'Account', 'Email', 'LastName']}
+``
 
+### Remove Comments
+There are other existing utilities, such as removing comments from code:
+```python
+new_code_snippet = apex_code_utility.remove_comments(sample_code)
+print(new_code_snippet)
+```
+
+This will print:
+```
+public class SampleClass {    
+        public Integer myNumber;
+        public Integer getMyNumber() {
+            // Return the current value of myNumber
+            return this.myNumber;
+        }
+    }
+ ```
+
+Note that this is an ongoing process, we will add more features to extract complicated code attributes in the future. More examples can be found [here](https://github.com/salesforce/CodeTF/tree/main/test_code_utilities).
+
+## More Examples
+You can find more examples for each use case:
+- [Fine-tuning](https://github.com/salesforce/CodeTF/tree/main/test_trainer)
+- [Inferencing]([https://github.com/salesforce/CodeTF/tree/main/test_inference)
+- [Model Evaluate](https://github.com/salesforce/CodeTF/tree/main/test_evaluator)
+- [Code Utility](https://github.com/salesforce/CodeTF/tree/main/test_code_utilities)
 
 ## Technical Report and Citing CodeTF
 You can find more details in our [technical report](https://arxiv.org/abs/2209.09019).
