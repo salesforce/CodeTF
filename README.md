@@ -45,20 +45,21 @@ The current version of the library offers:
 
 The following table shows the supported models with sizes and the tasks that the models support. This is a continuing effort and we are working on further growing the list.
     
-| Model      | Size                                      | Tasks                                                                                      |
-|------------|-------------------------------------------|--------------------------------------------------------------------------------------------|
-| CodeT5     | Small (125M), Medium (220M), Large (770M) | Pretrained, Code Sum, Code Generation, <br> Code Refinement, Defect Prediction, Clone Detection |
-| CodeT5+    | 220M, 770M, 2B, 6B, 16B                   | Pretrained                                                                                 |
-| CodeGen    | 350M, 2B, 6B, 16B                         | Pretrained                                                                                 |
-| SantaCoder | 1.1B                                      | Pretrained                                                                                 |
-| StarCoder  | 15.5B                                     | Pretrained                                                                                 |
-| GPT        | j (1.3B), j (6B), Neox (20B)             | Pretrained                                                                                 |
-| GPT-Neo    | 1.3B                                      | Pretrained                                                                                 |
-| BLOOM      | 560M, 1.1B, 1.7B, 3B, 7.1B                | Pretrained                                                                                 |
+| Model      | Type              | Size                                      | Tasks                                                                                      |
+|------------|-------------------|-------------------------------------------|--------------------------------------------------------------------------------------------|
+| CodeBERT   | Encoder           | Base (160M), Small (84M)                  | Pretrained, MLM                                                                            |
+| CodeGen    | Decoder           | 350M, 2B, 6B, 16B                         | Pretrained                                                                                 |
+| SantaCoder | Decoder           | 1.1B                                      | Pretrained                                                                                 |
+| StarCoder  | Decoder           | 15.5B                                     | Pretrained                                                                                 |
+| GPT        | Decoder           | j (1.3B), j (6B), Neox (20B)              | Pretrained                                                                                 |
+| GPT-Neo    | Decoder           | 1.3B                                      | Pretrained                                                                                 |
+| BLOOM      | Decoder           | 560M, 1.1B, 1.7B, 3B, 7.1B                | Pretrained                                                                                 |
+| Incoder    | Decoder           | 1B, 6B                                    | Pretrained                                                                                 |
+| CodeT5     | Encoder-Decoder   | Small (125M), Medium (220M), Large (770M) | Pretrained, Code Sum, Code Generation, Code Refinement, Defect Prediction, Clone Detection |
+| CodeT5+    | Encoder-Decoder   | 220M, 770M, 2B, 6B, 16B                   | Pretrained                                                                                 |
 
 
-## Quick Start
-### Install CodeTF:
+## Installation Guide
 
 1. (Optional) Creating conda environment
 
@@ -67,12 +68,12 @@ conda create -n codetf python=3.8
 conda activate codetf
 ```
 
-2. install from [PyPI](https://pypi.org/project/salesforce-codetf/)
+2. Install from [PyPI](https://pypi.org/project/salesforce-codetf/):
 ```bash
 pip install codetf
 ```
     
-3. Or, for development, you may build from source
+3. Alternatively, build CodeTF from source:
 
 ```bash
 git clone https://github.com/salesforce/CodeTF.git
@@ -80,13 +81,10 @@ cd CodeTF
 pip install -e .
 ```
 
+## Getting Started
 ### Inferencing Pipeline
     
-The function ``load_model_pipeline()`` is an important function that loads our supported models and tasks. Below is an example on how to use this function to load ``codet5`` models and perform inference on specific tasks (code translation and code summarization in this case). There are a few notable arguments that need to consider:
--  ``model_name``: the name of the model, currently support ``codet5`` and ``causal-lm``. 
--  ``model_type``: type of model for each model name, e.g. ``base``, ``codegen-350M-mono``, ``j-6B``, etc.
--  ``load_in_8bit``: inherit the ``load_in_8bit" feature from [Huggingface Quantization](https://huggingface.co/docs/transformers/main/main_classes/quantization).
--  ``weight_sharding``: our advance feature that leverate [HuggingFace Sharded Checkpoint](https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch) to split a large model in several smaller shards in different GPUs.
+Getting started with CodeTF is simple and quick with our model loading pipeline function ``load_model_pipeline()``. Here's an example showing how to load codet5 models and perform inference on code translation and code summarization:
     
 ```python
 from codetf.models import load_model_pipeline
@@ -121,44 +119,30 @@ print(translated_code_snippets)
 summaries = summarization_model.predict([code_snippets])
 print(summaries)
 ```
+There are a few notable arguments that need to be considered:
+-  ``model_name``: the name of the model, currently support ``codet5`` and ``causal-lm``. 
+-  ``model_type``: type of model for each model name, e.g. ``base``, ``codegen-350M-mono``, ``j-6B``, etc.
+-  ``load_in_8bit``: inherit the ``load_in_8bit" feature from [Huggingface Quantization](https://huggingface.co/docs/transformers/main/main_classes/quantization).
+-  ``weight_sharding``: our advance feature that leverate [HuggingFace Sharded Checkpoint](https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch) to split a large model in several smaller shards in different GPUs.
 
-## Loading Preprocessed Data
-
-We provide ``Dataset`` class for well-known datasets, including CodeXGLUE, Human Eval, MBPP, APPS. Below is an example of how to load the CodeXGLUE dataset.  
-
-```python
-from codetf.data_utility.codexglue_dataset import CodeXGLUEDataset
-from transformers import RobertaTokenizer
-
-tokenizer = RobertaTokenizer.from_pretrained("Salesforce/codet5-base", use_fast=True)
-dataset = CodeXGLUEDataset(tokenizer=tokenizer)
-train, test, validation = dataset.load(subset="text-to-code")
-```
-    
-    
-## Training Custom Model Using Our Dataloader and Trainer
-We also provide the users the ability to fine-tune their own LLMs for code using our utility.  Below is an example that use the CausalLMTrainer to fine-tune a code summarization model based on the CodeXGLUE dataset. First, the ``model_class`` is the class that contain the supported models in our pipeline. Next, the ``dataloader`` is an instance from our ``CodeXGLUEDataset``. Then we can load the dataset part that has been processed into appropriate format for training. Finally, the datasets are fed into the ``CausalLMTrainer`` with other parameters to fine-tune a custom model.
-        
+## Training Custom Model Using Our Trainer
+Want to train a custom LLM for code? We've got you covered. Below is an example using the ``CausalLMTrainer``, along with our dataset utilities, make it easy to fine-tune your models using the CodeXGLUE dataset. Here's an example:
     
 ```python
-import sys
-from pathlib import Path
-sys.path.append(str(Path(".").absolute().parent))
-import torch
 from codetf.trainer.causal_lm_trainer import CausalLMTrainer
-from codetf.data_utility.codexglue_dataloader import CodeXGLUEDataLoader
+from codetf.data_utility.codexglue_dataset import CodeXGLUEDataset
 from codetf.models import load_model_pipeline
-from codetf.performance.evaluate import Evaluator
+from codetf.performance.evaluate import EvaluationMetric
 
 model_class = load_model_pipeline(model_name="causal-lm", task="pretrained",
-                model_type="codegen-350M-mono",
-                quantize=None, quantize_algo="bitsandbyte")
+                model_type="starcoder-15.5B", is_eval=False,
+                load_in_8bit=False, weight_sharding=False)
 
 
-dataloader = CodeXGLUEDataLoader(tokenizer=model_class.get_tokenizer())
-train_dataset, test_dataset, val_dataset = dataloader.load_codexglue_code_to_text_dataset()
+dataloader = CodeXGLUEDataset(tokenizer=model_class.get_tokenizer())
+train_dataset, test_dataset, val_dataset = dataloader.load(subset="text-to-code")
 
-evaluator = Evaluator(metric="bleu", tokenizer=model_class.tokenizer)
+evaluator = EvaluationMetric(metric="bleu", tokenizer=model_class.tokenizer)
 
 # peft can be in ["lora", "prefixtuning"]
 trainer = CausalLMTrainer(train_dataset=train_dataset, 
@@ -170,11 +154,26 @@ trainer.train()
 # trainer.evaluate(test_dataset=test_dataset)
 ```
 
+Comparing to [this script from StarCoder](https://github.com/bigcode-project/starcoder/blob/main/finetune/finetune.py), which requires almost 300 LOCs, we only need 14 LOCs to do the same !!!
+
+
+## Loading Preprocessed Data
+
+CodeTF provides the Dataset utility for several well-known datasets, such as CodeXGLUE, Human Eval, MBPP, and APPS. The following is an example of how to load the CodeXGLUE dataset:  
+
+```python
+from codetf.data_utility.codexglue_dataset import CodeXGLUEDataset
+from transformers import RobertaTokenizer
+
+tokenizer = RobertaTokenizer.from_pretrained("Salesforce/codet5-base", use_fast=True)
+dataset = CodeXGLUEDataset(tokenizer=tokenizer)
+train, test, validation = dataset.load(subset="text-to-code")
+```
 
 ## Code utilities
 ### AST Parser in Multiple Languages
 
-Below is an example to parse Apex code into an AST.
+CodeTF also provides AST parsers that supports multiple programming languages. Here is an example of how to parse Apex code into an AST:
 ```python
 from codetf.code_ultilities import load_parser
 
@@ -208,7 +207,7 @@ assert root_node.end_point == (3, 13)
 
 ### Extract Code Attributes
 
-We also provide interface to extract the code attributes easily. Below is the sample to extract the function name of a python function:
+CodeTF provides an interface to easily extract code attributes. The following is a sample for extracting the function name of a Python function:
 
 ```python
 from codetf.code_ultilities import load_code_attributes_extractor
@@ -227,7 +226,7 @@ function_name = extractor.extract_function_name(code_snippets)
 print(function_name)
 ```
 
-This will print ```add_two_numbers``` as the function name.
+This will print add_two_numbers as the function name. This can be useful for many applications, including code summarization, function navigation, and more.
 
 
 ## Technical Report and Citing CodeTF
