@@ -277,7 +277,7 @@ Note that this is an ongoing process, we will add more features to extract compl
 ## More Examples
 You can find more examples for each use case:
 - [Fine-tuning](https://github.com/salesforce/CodeTF/tree/main/test_trainer)
-- [Inferencing]([https://github.com/salesforce/CodeTF/tree/main/test_inference)
+- [Inferencing](https://github.com/salesforce/CodeTF/tree/main/test_inference)
 - [Model Evaluate](https://github.com/salesforce/CodeTF/tree/main/test_evaluator)
 - [Code Utility](https://github.com/salesforce/CodeTF/tree/main/test_code_utilities)
 
