@@ -266,11 +266,10 @@ print(new_code_snippet)
 ```
 
 This will print:
-```
+```java
 public class SampleClass {    
         public Integer myNumber;
         public Integer getMyNumber() {
-            // Return the current value of myNumber
             return this.myNumber;
         }
     }
