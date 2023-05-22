@@ -24,7 +24,7 @@ class ModelEvaluator:
    
     def evaluate_pass_k(self, problems, unit_tests, batch_size=1, max_length=600, 
                         top_p=0.95, k=[1,10,100], 
-                        num_return_sequences=20, sequences_per_chunk=10, num_workers=1):
+                        num_return_sequences=200, sequences_per_chunk=10, num_workers=1):
         # Load dataset
         data_loader = DataLoader(problems, batch_size=batch_size)
         data_loader = self.accelerator.prepare(data_loader)
@@ -41,7 +41,9 @@ class ModelEvaluator:
         solutions = []
         chunks = num_return_sequences // sequences_per_chunk
         # Generate and evaluate solutions
-        for step, batch in tqdm(enumerate(data_loader)):
+        
+        dataloader_pbar = tqdm(enumerate(data_loader), total=len(data_loader))
+        for step, batch in dataloader_pbar:
             prompt_ids, attention_masks = batch
             
             solutions_per_chunk = []
@@ -68,18 +70,20 @@ class ModelEvaluator:
                         cleaned =  remove_last_block(item)
                         solutions_per_chunk.append(cleaned)
                     
-                    # print("Solutions per chunk : ", len(solutions_per_chunk))
+                    print("Solutions per chunk : ", solutions_per_chunk)
                     
             solutions.append(solutions_per_chunk)
-            # print("Solutions : ", len(solutions))
+            dataloader_pbar.set_description(f"Processing step {step+1}/{len(data_loader)}")
             
         # Compute pass@k for each solution
         pass_at_k_list = []
-        for i, solution in enumerate(solutions):
+        passk_pbar = tqdm(enumerate(solutions), total=len(solutions))
+        for i, solution in passk_pbar:
             pass_at_k, _ = self.code_eval.compute(
                 references=[unit_tests[i]], predictions=[solution], k=k, num_workers=num_workers
             )
-            # print(pass_at_k)
+            passk_pbar.set_description(f"Evaluating solution {i+1}/{len(solutions)}")
+            passk_pbar.set_postfix({"Current pass_at_k": pass_at_k})
             pass_at_k_list.append(pass_at_k)
 
         # Initialize dictionary for average pass@k based on the first pass_at_k dict

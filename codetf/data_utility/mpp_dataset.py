@@ -6,7 +6,7 @@ from datasets import load_dataset
 from codetf.data_utility.base_dataloader import BaseDataset
 # from torch.utils.data import TensorDataset
 
-class APPSDataset(BaseDataset):
+class MBPPDataset(BaseDataset):
 
     def __init__(self, tokenizer, max_length=512):
         
@@ -22,9 +22,9 @@ class APPSDataset(BaseDataset):
         train_input_output = train["input_output"]
 
         test = dataset["test"]
-        test_question_tensors, _ = self.process_data(test["question"])
-        test_solutions_tensors, _ = self.process_data(test["solution"])
-        test_input_output, _ = test["input_output"]
+        test_question_tensors = self.process_data(test["question"])
+        test_solutions_tensors = self.process_data(test["solution"])
+        test_input_output = test["input_output"]
 
         train_data = (train_question_tensors, train_solutions_tensors, train_input_output)
         test_data = (test_question_tensors, test_solutions_tensors, test_input_output)

@@ -5,4 +5,5 @@ dataset:
   codexglue_code_refinement: "code_x_glue_cc_code_refinement"
   APPS: "codeparrot/apps"
   openai_humaneval: "openai_humaneval"
+  mbpp: "mbpp"
  

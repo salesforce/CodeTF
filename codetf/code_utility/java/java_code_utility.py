@@ -1,4 +1,4 @@
-from codetf.code_utilities.language_specific_utility import LanguageSpecificUtility
+from codetf.code_utility.language_specific_utility import LanguageSpecificUtility
 
 class JavaCodeUtility(LanguageSpecificUtility):
     def __init__(self):

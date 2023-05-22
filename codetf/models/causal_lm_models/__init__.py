@@ -46,13 +46,13 @@ class CausalLMModel(BaseModel):
             if load_in_8bit:
                 model = AutoModelForCausalLM.from_pretrained(checkpoint, 
                                             load_in_8bit=load_in_8bit, 
-                                            device_map={"": Accelerator().process_index})
+                                            device_map="auto")
             else:
                 model = AutoModelForCausalLM.from_pretrained(checkpoint, 
-                                            device_map={"": Accelerator().process_index})
+                                            device_map="auto")
 
 
-        tokenizer = model_class.init_tokenizer(checkpoint)
+        tokenizer = model_class.init_tokenizer(model_config["tokenizer_url"])
         
         return model_class(
             model=model,
@@ -61,9 +61,12 @@ class CausalLMModel(BaseModel):
         )
    
     def forward(self, sources):
-        input_ids = self.tokenizer(sources, return_tensors='pt').input_ids.to(self.device)
-        generated_ids = self.model.generate(input_ids, 
-                                            max_length=self.max_prediction_length)
+        encoding = self.tokenizer(sources, return_tensors='pt')
+        input_ids = encoding.input_ids.to(self.device)
+        attention_mask = encoding.attention_mask.to(self.device)
+        generated_ids = self.model.generate(input_ids, attention_mask=attention_mask, 
+                                            max_length=self.max_prediction_length,
+                                            num_beams=self.beam_size)
 
         predictions = self.tokenizer.batch_decode(generated_ids, truncate_before_pattern=[r"\n\n^#", "^'''", "\n\n\n"])
         return predictions
@@ -72,36 +75,3 @@ class CausalLMModel(BaseModel):
         input_for_net = [' '.join(source.strip().split()).replace('\n', ' ') for source in sources]
         output = self.forward(input_for_net)
         return output
-    
-    # def predict_for_code_complete(self, dataloader, args, batch_size=1):
-    #     gen_token_dict = defaultdict(list)  # dict of list of generated tokens
-    #     for step, batch in tqdm(enumerate(dataloader)):
-    #         # print(batch)
-    #         prompt_ids, attention_masks = batch
-           
-    #         with torch.no_grad():
-    #             args["stopping_criteria"][0].start_length = attention_masks[0].sum().item()
-    #             # print("DDD : ",attention_masks[0].sum().item())
-    #             # print(attention_masks.sum().item())
-    #             input_ids = prompt_ids[0, :attention_masks[0].sum().item()]
-    #             print("-----------")
-    #             print(input_ids)
-    #             input_data = self.tokenizer.decode(input_ids, skip_special_tokens=True, clean_up_tokenization_spaces=True)
-    #             print("Input: ", input_data)
-
-    #             # print(input_ids.shape)
-    #             generated_tokens = self.model.generate(
-    #                 input_ids=input_ids.unsqueeze(0), max_length=512, num_return_sequences=batch_size, **args
-    #             )
-    #             generated_tokens = generated_tokens.cpu().numpy()
-    #             # print(generated_tokens)
-    #             gen_code = self.tokenizer.decode(generated_tokens[0], skip_special_tokens=True, clean_up_tokenization_spaces=True)
-    #             print("Solution: ", gen_code)
-    #             # for task, generated_tokens in zip(generated_tasks, generated_tokens):
-    #             #     gen_token_dict[task].append(generated_tokens)
-    #     # code_gens = [[] for _ in range(n_tasks)]
-    #     # for task, generated_tokens in gen_token_dict.items():
-    #     #     for s in generated_tokens:
-    #     #         gen_code = tokenizer.decode(s, skip_special_tokens=True, clean_up_tokenization_spaces=True)
-    #     #         code_gens[task].append(remove_last_block(gen_code))
-    #     return code_gens

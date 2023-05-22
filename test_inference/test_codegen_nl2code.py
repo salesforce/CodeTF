@@ -5,11 +5,12 @@ sys.path.append(str(Path(".").absolute().parent))
 import torch
 from codetf.models import load_model_pipeline
 
-model = load_model_pipeline(model_name="causal-lm", task="pretrained",
-                model_type="codegen-350M-mono",
-                quantize="int8", quantize_algo="bitsandbyte")
+
+model_class = load_model_pipeline(model_name="causal-lm", task="pretrained",
+            model_type="codegen-350M-mono", is_eval=True,
+            load_in_8bit=True, weight_sharding=False)
 
 prompts = "# check if a string is in valid format"
-code_snippets = model.predict([prompts])
+code_snippets = model_class.predict([prompts])
 
 print(code_snippets)

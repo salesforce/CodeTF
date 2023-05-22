@@ -47,7 +47,8 @@ class BaseTrainer():
         else:
             self.compute_metrics_fn = None
 
-        self.trainer = Trainer(
+    def init_trainer(self):
+        return Trainer(
             model=self.model,
             args=self.training_args,
             train_dataset=self.train_dataset,
@@ -71,10 +72,13 @@ class BaseTrainer():
             warmup_steps=hyperparameters_config["warmup_steps"],
             learning_rate=hyperparameters_config["learning_rate"],
             fp16=hyperparameters_config["fp16"],
+            fsdp=hyperparameters_config["fsdp"],
+            sharded_ddp=hyperparameters_config["sharded_ddp"],
             logging_steps=hyperparameters_config["logging_steps"],
             evaluation_strategy=hyperparameters_config["evaluation_strategy"],
             gradient_checkpointing=hyperparameters_config["gradient_checkpointing"],
-            output_dir="./outputs",
+            auto_find_batch_size=hyperparameters_config["auto_find_batch_size"],
+            output_dir=self.checkpoints_path
         )
         # return hyperparameters_config
         return training_args
@@ -89,10 +93,13 @@ class BaseTrainer():
             warmup_steps=hyperparameters_config["num_train_epochs"],
             learning_rate=hyperparameters_config["learning_rate"],
             fp16=hyperparameters_config["fp16"],
+            fsdp=hyperparameters_config["fsdp"],
+            sharded_ddp=hyperparameters_config["sharded_ddp"],
             logging_steps=hyperparameters_config["logging_steps"],
             evaluation_strategy=hyperparameters_config["evaluation_strategy"],
             gradient_checkpointing=hyperparameters_config["gradient_checkpointing"],
-            output_dir="./outputs",
+            auto_find_batch_size=hyperparameters_config["auto_find_batch_size"],
+            output_dir=self.checkpoints_path
         )
         # return hyperparameters_config
         return training_args

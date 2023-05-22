@@ -3,8 +3,9 @@ from pathlib import Path
 sys.path.append(str(Path(".").absolute().parent))
 from transformers import RobertaTokenizer
 from codetf.models.base_model import BaseModel
-from transformers import T5ForConditionalGeneration
+from transformers import T5ForConditionalGeneration, T5Config
 from codetf.common.registry import registry
+from accelerate import Accelerator
 
 @registry.register_model("codet5")
 class CodeT5Seq2SeqModel(BaseModel):
@@ -25,23 +26,30 @@ class CodeT5Seq2SeqModel(BaseModel):
     
   
     @classmethod
-    def load_model_from_config(model_class, model_config, quantize=None, quantize_algo=None):
+    def load_model_from_config(model_class, model_config, load_in_8bit=True, weight_sharding=True):
         
-        # model = ctranslate2.Translator(huggingface_path, compute_type="int8")
-        if quantize_algo:
-            if quantize_algo == "bitsandbyte":
-                if quantize == "int8":
-                    print("Loading 8 bit....")
-                    model = T5ForConditionalGeneration.from_pretrained(model_config["huggingface_url"], load_in_8bit=True, device_map='auto')
-                else:
-                    model = T5ForConditionalGeneration.from_pretrained(model_config.get("huggingface_url"), device_map='auto')
-            else:
-                model = ctranslate2.Translator(model_config["huggingface_url"], compute_type=quantize)
+        checkpoint = model_config["huggingface_url"]
+        if weight_sharding:
+            weights_location = hf_hub_download(checkpoint, "pytorch_model.bin")
+            config = T5Config.from_pretrained(checkpoint)
+            with init_empty_weights():
+                model = AutoModelForCausalLM.from_config(config)
+
+            model.tie_weights()            
+            model = load_checkpoint_and_dispatch(
+                model, weights_location, device_map="auto", no_split_module_classes=["GPTJBlock"]
+            )
         else:
-            model = T5ForConditionalGeneration.from_pretrained(model_config["huggingface_url"], device_map='auto')
-        
+            if load_in_8bit:
+                model = T5ForConditionalGeneration.from_pretrained(checkpoint, 
+                                            load_in_8bit=load_in_8bit, 
+                                            device_map="auto")
+            else:
+                model = T5ForConditionalGeneration.from_pretrained(checkpoint, 
+                                            device_map="auto")
+
            
-        tokenizer = model_class.init_tokenizer(model_config.get("tokenizer_url"), device_map='auto')
+        tokenizer = model_class.init_tokenizer(model_config.get("tokenizer_url"))
 
         return model_class(
             model=model,
@@ -51,11 +59,12 @@ class CodeT5Seq2SeqModel(BaseModel):
     
 
     def forward_seq2seq(self, sources):
-        input_ids = self.tokenizer(sources, padding=True, return_tensors='pt').input_ids.to(self.device)
-        generated_ids = self.model.generate(input_ids, 
+        encoding = self.tokenizer(sources, return_tensors='pt')
+        input_ids = encoding.input_ids.to(self.device)
+        attention_mask = encoding.attention_mask.to(self.device)
+        generated_ids = self.model.generate(input_ids, attention_mask=attention_mask,
                                             max_length=self.max_prediction_length, 
-                                            num_beams=self.beam_size, 
-                                            num_return_sequences=1)
+                                            num_beams=self.beam_size)
 
         predictions = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
         return predictions

@@ -18,12 +18,13 @@ hyperparameters:
   gradient_accumulation_steps: 1
   gradient_checkpointing: True
   sharded_ddp: False
-  fsdp: True
+  fsdp: False
   weight_decay: 0.0001
   run_name: "CodeT5-seq2seq-fine-tuned"
   ddp_find_unused_parameters: False
   fp16: True
   bf16: False
+  auto_find_batch: True
   num_workers: 4
   max_prediction_length: 512
   beam_size: 5

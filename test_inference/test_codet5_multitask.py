@@ -5,13 +5,13 @@ sys.path.append(str(Path(".").absolute().parent))
 import torch
 from codetf.models import load_model_pipeline
 
-translation_model = load_model_pipeline(model_name="codet5", 
-                model_type="base", task="translate", language="java-cs", 
-                quantize="int8", quantize_algo="bitsandbyte")
+translation_model = load_model_pipeline(model_name="codet5", task="translate-cs-java",
+            model_type="base", is_eval=True,
+            load_in_8bit=True, weight_sharding=False)
 
-summarization_model = load_model_pipeline(model_name="codet5", 
-                model_type="base", task="sum", language="python", 
-                quantize="int8", quantize_algo="bitsandbyte")
+summarization_model = load_model_pipeline(model_name="codet5", task="sum-python",
+            model_type="base", is_eval=True,
+            load_in_8bit=True, weight_sharding=False)
 
 code_snippets = """
     void bubbleSort(int arr[])

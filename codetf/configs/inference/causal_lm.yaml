@@ -35,8 +35,8 @@ causal-lm-codegen-6B-multi-pretrained:
     tokenizer_url: "Salesforce/codegen-6B-mullti"
     max_prediction_legnth: 512
 causal-lm-starcoder-15.5B-pretrained:
-    huggingface_url: "Salesforce/bigcode/starcoder"
-    tokenizer_url: "Salesforce/bigcode/starcoder"
+    huggingface_url: "bigcode/starcoder"
+    tokenizer_url: "bigcode/starcoder"
     max_prediction_length: 512
 causal-lm-gpt-neox-20B-pretrained:
     huggingface_url: "EleutherAI/gpt-neox-20b"
@@ -49,5 +49,9 @@ causal-lm-gpt-neo-1.3B-pretrained:
 causal-lm-gpt-j-6B-pretrained:
     huggingface_url: "EleutherAI/gpt-j-6b"
     tokenizer_url:  "EleutherAI/gpt-j-6b"
+    max_prediction_length: 512
+causal-lm-incoder-6B-pretrained:
+    huggingface_url: "facebook/incoder-6B"
+    tokenizer_url:  "facebook/incoder-6B"
     max_prediction_length: 512
 
