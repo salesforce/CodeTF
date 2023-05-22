@@ -9,6 +9,7 @@ from tqdm import tqdm
 from urllib.parse import urlsplit
 from codetf.common.utils import get_abs_path
 import urllib.request
+from accelerate import Accelerator
 
 def download_model(model_cache_path, model_url):
     if not os.path.exists(model_cache_path):
@@ -32,31 +33,28 @@ class BaseModel(nn.Module):
     DEFAULT_CONFIG_PATH = "configs/default.yaml"
     def __init__(self):
         super().__init__()
+        self.accelerator = Accelerator()
 
     @property
     def device(self):
         return list(self.parameters())[0].device
-
+    
     @classmethod
-    def from_pretrained(model_class, model_card, quantize="int8", quantize_algo="bitsandbyte"):
+    def from_pretrained(model_class, model_card, load_in_8bit=True, weight_sharding=True):
         """
         Build a pretrained model from default configuration file, specified by model_type.
         """
-        model_config = OmegaConf.load(model_class.get_class_config_path(model_card)).model
-        default_config = OmegaConf.load(get_abs_path(model_class.DEFAULT_CONFIG_PATH)).env
-
-        model_cls = model_class.load_model_from_config(class_config=model_config, quantize=quantize, quantize_algo=quantize_algo)
+        model_config = OmegaConf.load(get_abs_path(model_class.MODEL_DICT))[model_card]
+        model_cls = model_class.load_model_from_config(model_config=model_config, load_in_8bit=load_in_8bit, weight_sharding=weight_sharding)
 
         return model_cls
 
+    def get_model(self):
+        return self.model
+    
+    def get_tokenizer(self):
+        return self.tokenizer
 
-    @classmethod
-    def get_class_config_path(cls, model_card):
-        # print(cls.PRETRAINED_MODEL_CONFIG_DICT)
-        assert (
-            model_card in cls.PRETRAINED_MODEL_CONFIG_DICT
-        ), "Unknown model type {}".format(model_card)
-        return get_abs_path(cls.PRETRAINED_MODEL_CONFIG_DICT[model_card])
 
     def before_evaluation(self, **kwargs):
         pass

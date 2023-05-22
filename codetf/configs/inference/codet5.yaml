@@ -1,0 +1,78 @@
+codet5-base-multi-sum-pretrained:
+    huggingface_url: "Salesforce/codet5-base-multi-sum"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-nl2code:
+    huggingface_url: "Salesforce/codet5-base-codexglue-concode"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-refine:
+    huggingface_url: "Salesforce/codet5-base-codexglue-refine-medium"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-translate-cs-java:
+    huggingface_url: "Salesforce/codet5-base-codexglue-translate-cs-java"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-translate-java-cs:
+    huggingface_url: "Salesforce/codet5-base-codexglue-translate-java-cs"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-sum-python:
+    huggingface_url: "Salesforce/codet5-base-codexglue-sum-python"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-sum-go:
+    huggingface_url: "Salesforce/codet5-base-codexglue-sum-go"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-sum-php:
+    huggingface_url: "Salesforce/codet5-base-codexglue-sum-php"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-sum-javascript:
+    huggingface_url: "Salesforce/codet5-base-codexglue-sum-javascript"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-sum-java:
+    huggingface_url: "Salesforce/codet5-base-codexglue-sum-java"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-sum-ruby:
+    huggingface_url: "Salesforce/codet5-base-codexglue-sum-ruby"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-clone:
+    huggingface_url: "Salesforce/codet5-base-codexglue-clone"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-base-defect:
+    huggingface_url: "Salesforce/codet5-base-codexglue-defect"
+    tokenizer_url: "Salesforce/codet5-base"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5

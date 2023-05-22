@@ -1,6 +1,0 @@
-model:
-  huggingface_url: "Salesforce/codegen-350M-nl"
-  tokenizer_url: "Salesforce/codegen-350M-nl"
-  max_source_length: 512
-  max_target_length: 512
-  beam_size: 2

@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(".").absolute().parent))
-# sys.path.append(str(Path(__file__).resolve().parents[2]))
 from codetf.data_utility.codexglue_dataloader import CodeXGLUEDataLoader
 from transformers import RobertaTokenizer
 

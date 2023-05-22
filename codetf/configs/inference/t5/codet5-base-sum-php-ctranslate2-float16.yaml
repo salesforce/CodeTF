@@ -1,6 +1,0 @@
-model:
-  huggingface_url: "Salesforce/codet5-base-codexglue-sum-php-float16"
-  tokenizer_url: "Salesforce/codet5-base"
-  max_source_length: 512
-  max_target_length: 512
-  beam_size: 2

@@ -5,28 +5,22 @@ import logging
 from omegaconf import OmegaConf
 from codetf.common.registry import registry
 from codetf.models.base_model import BaseModel
-from codetf.models.codet5_models.codet5_summarization import CodeT5Summarization
-from codetf.models.codet5_models.codet5_nl2code import CodeT5NL2Code
-from codetf.models.codet5_models.codet5_translation import CodeT5Translation
-from codetf.models.codet5_models.codet5_refine import CodeT5Refine
-from codetf.models.gpt_models.codegen_nl2code import CodeGenNL2Code
+from codetf.models.codet5_models import CodeT5Seq2SeqModel
+from codetf.models.causal_lm_models import CausalLMModel
 
 
 __all__ = [
-    "CodeT5Summarization",
-    "CodeT5NL2Code",
-    "CodeT5Translation",
-    "CodeT5Refine",
-    "CodeGenNL2Code"
+    "CodeT5Seq2SeqModel",
+    "CausalLMModel"
 ]
 
-card_name_mapper = {
-    "codet5_translation": "codet5",
-    "codet5_summarization": "codet5",
-    "codet5_nl2code": "codet5",
-    "codet5_clone": "codet5",
-    "codet5_defect": "codet5"
-}
+# card_name_mapper = {
+#     "codet5_translation": "codet5",
+#     "codet5_summarization": "codet5",
+#     "codet5_nl2code": "codet5",
+#     "codet5_clone": "codet5",
+#     "codet5_defect": "codet5"
+# }
 
 def get_model_config(model_name, model_type="base"):
     import json
@@ -76,46 +70,46 @@ def get_model_class_name(model_name, task):
     class_name = f"{model_name}_{task}"
     return class_name
 
-def load_model(model_name, model_type="base", task="sum",
-            dataset=None, language=None, is_eval=False, 
-            quantize="int8", quantize_algo="bitsandbyte"):
-    model_cls = registry.get_model_class(get_model_class_name(model_name,task))
+def load_model_pipeline(model_name, model_type="base", task="sum",
+            dataset=None, language=None, is_eval=True, 
+            load_in_8bit=True, weight_sharding=True):
+    
+    model_cls = registry.get_model_class(model_name)
     model_card = construct_model_card(model_name, model_type, task, dataset, language)
-    model = model_cls.from_pretrained(model_card=model_card, quantize=quantize, quantize_algo=quantize_algo)
-    # model = model_cls.load_model_from_config(config)
+    model = model_cls.from_pretrained(model_card=model_card, load_in_8bit=load_in_8bit, weight_sharding=weight_sharding)
     if is_eval:
         model.eval()
 
     return model
 
 
-class ModelZoo:
-    def __init__(self) -> None:
-        self.model_zoo = {
-            k: list(v.PRETRAINED_MODEL_CONFIG_DICT.keys())
-            for k, v in registry.mapping["model_name_mapping"].items()
-        }
+# class ModelZoo:
+#     def __init__(self) -> None:
+#         self.model_zoo = {
+#             k: list(v.PRETRAINED_MODEL_CONFIG_DICT.keys())
+#             for k, v in registry.mapping["model_name_mapping"].items()
+#         }
 
-    def __str__(self) -> str:
-        return (
-            "=" * 50
-            + "\n"
-            + f"{'Architectures':<30} {'Types'}\n"
-            + "=" * 50
-            + "\n"
-            + "\n".join(
-                [
-                    f"{name:<30} {', '.join(types)}"
-                    for name, types in self.model_zoo.items()
-                ]
-            )
-        )
+#     def __str__(self) -> str:
+#         return (
+#             "=" * 50
+#             + "\n"
+#             + f"{'Architectures':<30} {'Types'}\n"
+#             + "=" * 50
+#             + "\n"
+#             + "\n".join(
+#                 [
+#                     f"{name:<30} {', '.join(types)}"
+#                     for name, types in self.model_zoo.items()
+#                 ]
+#             )
+#         )
 
-    def __iter__(self):
-        return iter(self.model_zoo.items())
+#     def __iter__(self):
+#         return iter(self.model_zoo.items())
 
-    def __len__(self):
-        return sum([len(v) for v in self.model_zoo.values()])
+#     def __len__(self):
+#         return sum([len(v) for v in self.model_zoo.values()])
 
 
-model_zoo = ModelZoo()
+# model_zoo = ModelZoo()

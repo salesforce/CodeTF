@@ -3,4 +3,6 @@ dataset:
   codexglue_java_to_csharp: "code_x_glue_cc_code_to_code_trans"
   codexglue_code_to_text: "code_x_glue_ct_code_to_text"
   codexglue_code_refinement: "code_x_glue_cc_code_refinement"
+  APPS: "codeparrot/apps"
+  openai_humaneval: "openai_humaneval"
  
