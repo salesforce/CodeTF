@@ -29,9 +29,9 @@
   - [License](#license)
 
 ## Introduction
-CodeTF is a state-of-the-art deep learning library in Python designed to provide a comprehensive interface for training and inferencing on code intelligence tasks, collectively known as AI4Code. This library encompasses a broad spectrum of tasks, including code summarization, code translation, code generation, and more. Our primary goal is to equip researchers and engineers with a one-stop solution that enables them to seamlessly explore the potential of cutting-edge language models for code. With its intuitive and user-friendly interface, we aspire to facilitate the integration of AI4Code into real-world applications with minimal effort.
+CodeTF is a one-stop Python library for code intelligence tasks (AI4Code), provides a seamless interface for training and inferencing on code intelligence tasks like code summarization, translation, and generation. It aims to facilitate easy integration of cutting-edge language models into real-world applications.
 
-As an all-inclusive code intelligence toolkit, CodeTF also offers utilities that allow for effortless manipulation of source code across various programming languages. These utilities enable users to extract code attributes such as function names, comments, identifiers, and variable names. To accomplish this, an Abstract Syntax Tree (AST) parser is essential, and our library leverages tree-sitter as its core parser. To enhance accessibility for our users, we have pre-built tree-sitter libraries into .so files for immediate use, covering programming languages like Bash, C#, C++, C, CSS, ELM, Go, Haskell, HTML, Java, JavaScript, Kotlin, Lua, PHP, Python, Ruby, Rust, Scala, Solidity, and SFApex. This eliminates the need for users to set up these parsers, which can often be challenging. With CodeTF, users can instantly utilize our utilities with ease.
+In addition to the core tasks, CodeTF offers utilities for code manipulation across various languages, including easy extraction of code attributes. Using tree-sitter as its core parser, it enables parsing of attributes such as function names, comments, and variable names. Pre-built libraries for numerous languages are provided, eliminating the need for complicated parser setup. CodeTF thus ensures a user-friendly and accessible environment for code intelligence tasks.
 
 The current version of the library offers:
 
@@ -41,7 +41,7 @@ The current version of the library offers:
 - **Datasets+**: We have preprocessed well-known benchmarks (Human-Eval, MBPP, CodeXGLUE, APPS) and offer an easy-to-load feature for these datasets.
 - **Pretrained Models**: We supply pretrained checkpoints of state-of-the-art foundational language models of code (CodeT5, CodeGen, CodeT5+).
 - **Fine-Tuned Models**: We furnish fine-tuned checkpoints for 8+ downstream tasks.
-- **Utility to Manipulate Source Code**: We provide utilities to easily manipulate source code, such as user-friendly AST parsers in multiple languages.
+- **Utility to Manipulate Source Code**: We provide utilities to easily manipulate source code, such as user-friendly AST parsers in 15+ programming languages.
 
 The following table shows the supported models with sizes and the tasks that the models support. This is a continuing effort and we are working on further growing the list.
     
@@ -57,41 +57,6 @@ The following table shows the supported models with sizes and the tasks that the
 | BLOOM      | 560M, 1.1B, 1.7B, 3B, 7.1B                | Pretrained                                                                                 |
 
 
-## CodeTF Overview
-
-The figure below shows an overview of the library design, the modules that we have and the functionality of each module.
-<p align="center">
-    <br>
-    <img src="assets/overview.png" width="1000"/>
-    <br>
-<p>   
-    
-    
-### Code Utility
-The Code Utility module serves as the foundation of our library, utilizing tree-sitter as the parser for 15 programming languages, such as Java, Apex, C, C++, C#, Python, Scala, SOQL, SOSL, PHP, JavaScript, Haskell, Go, Kotlin, Ruby, Rust, Scala, Solidity, and YAML. It offers utility functions for tasks such as comment removal, extraction of code properties (e.g., comments, variable names, method names), and more. This module ensures the efficient handling and manipulation of code, catering to the unique syntax and structure of each supported programming language.
-
-### Model Cards
-The Model Card module provides configurations for both pretrained and fine-tuned checkpoints, encompassing CodeT5, CodeGen, and CodeT5+, which are available on the Hugging Face platform. This module streamlines access to state-of-the-art models for code intelligence tasks, enabling users to utilize these models in their applications. Each model is accompanied by a YAML configuration file containing essential information such as the Hugging Face URL, tokenizer, maximum sequence length, and more.
-
-### Inferencing Module
-
-The Inferencing Module provides users with the ability to load checkpoints from model cards, utilizing pretrained and fine-tuned models for a variety of tasks, such as code summarization, completion, generation, and refinement. This module simplifies the deployment of models for an array of code intelligence tasks by offering a convenient method for conducting inference on new code snippets. CodeTF incorporates CTranslate2, BitsandByte, and GPTQ as diverse quantization choices to accommodate various requirements.
-
-### Training Module
-
-The Fine-tuning Module allows users to load checkpoints from model cards and customize their models using existing datasets. Supporting both full model and parameter-efficient fine-tuning methods, this module enables users to optimize models for their specific use cases. To facilitate parameter-efficient fine-tuning, we utilize PEFT as the backbone, which includes various supported methods such as LORA, Prefix-Tuning, P-Tuning, Prompt Tuning, and AdaLORA.
-
-### Data Utility Module
-
-The Data Utility module provides a suite of tools for data preprocessing, including tokenization, code processing, and data loaders. These utilities ensure that data is appropriately prepared for use in training and inference, promoting efficient and accurate model performance.
-
-### Datasets Module
-
-The Datasets module contains preprocessed datasets that can be conveniently loaded from Hugging Face. This module simplifies the process of obtaining and utilizing code-related datasets, fostering a seamless experience for users who wish to train or fine-tune models on diverse data. We currently preprocessed the HumanEval, MBPP, APPS, and CodeXGLUE and hosted them on Huggingface for ease of use.
-
-### Evaluator Module
-We also aim to provide a unified interface that offers a variety of metrics specifically tailored to code intelligence tasks, including but not limited to Pass@K, Edit Similarity, and CodeBLEU. By providing these standardized metrics, we seek to streamline the evaluation process and facilitate
-    
 ## Quick Start
 ### Install CodeTF:
 
@@ -118,25 +83,21 @@ pip install -e .
 ### Inferencing Pipeline
     
 The function ``load_model_pipeline()`` is an important function that loads our supported models and tasks. Below is an example on how to use this function to load ``codet5`` models and perform inference on specific tasks (code translation and code summarization in this case). There are a few notable arguments that need to consider:
--  model_name: the name of the model, currently support ``codet5`` and ``causal-lm``. 
--  model_type: type of model for each model name, e.g. ``base``, ``codegen-350M-mono``, ``j-6B``, etc.
--  quantize: the precision level of quantized model, currently support ``int8``. More such as ``int16``, ``float16``, etc., will be supported in the future.
--  quantize_algo: currently support ``bitsandbyte``.
+-  ``model_name``: the name of the model, currently support ``codet5`` and ``causal-lm``. 
+-  ``model_type``: type of model for each model name, e.g. ``base``, ``codegen-350M-mono``, ``j-6B``, etc.
+-  ``load_in_8bit``: inherit the ``load_in_8bit" feature from [Huggingface Quantization](https://huggingface.co/docs/transformers/main/main_classes/quantization).
+-  ``weight_sharding``: our advance feature that leverate [HuggingFace Sharded Checkpoint](https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch) to split a large model in several smaller shards in different GPUs.
     
 ```python
-import sys
-from pathlib import Path
-sys.path.append(str(Path(".").absolute().parent))
-import torch
 from codetf.models import load_model_pipeline
 
-translation_model = load_model_pipeline(model_name="codet5", 
-                model_type="base", task="translate", language="java-cs", 
-                quantize="int8", quantize_algo="bitsandbyte")
+translation_model = load_model_pipeline(model_name="codet5", task="translate-cs-java",
+            model_type="base", is_eval=True,
+            load_in_8bit=True, weight_sharding=False)
 
-summarization_model = load_model_pipeline(model_name="codet5", 
-                model_type="base", task="sum", language="python", 
-                quantize="int8", quantize_algo="bitsandbyte")
+summarization_model = load_model_pipeline(model_name="codet5", task="sum-python",
+            model_type="base", is_eval=True,
+            load_in_8bit=True, weight_sharding=False)
 
 code_snippets = """
     void bubbleSort(int arr[])
@@ -163,30 +124,20 @@ print(summaries)
 
 ## Loading Preprocessed Data
 
-We provide ``dataloader`` for well-known datasets, such as the CodeXGLUE dataset so that it can be loaded easily.     
+We provide ``Dataset`` class for well-known datasets, including CodeXGLUE, Human Eval, MBPP, APPS. Below is an example of how to load the CodeXGLUE dataset.  
 
 ```python
-import sys
-from pathlib import Path
-sys.path.append(str(Path(".").absolute().parent))
-from codetf.data_utility.codexglue_dataloader import CodeXGLUEDataLoader
+from codetf.data_utility.codexglue_dataset import CodeXGLUEDataset
 from transformers import RobertaTokenizer
 
-def main():
-    tokenizer = RobertaTokenizer.from_pretrained("Salesforce/codet5-base")
-    
-    dataloader = CodeXGLUEDataLoader(tokenizer=tokenizer)
-    train_dataset, test_dataset, val_dataset = dataloader.load_codexglue_code_to_text_dataset()
-    print(train_dataset[1])
-
-
-if __name__ == "__main__":
-    main() 
+tokenizer = RobertaTokenizer.from_pretrained("Salesforce/codet5-base", use_fast=True)
+dataset = CodeXGLUEDataset(tokenizer=tokenizer)
+train, test, validation = dataset.load(subset="text-to-code")
 ```
     
     
 ## Training Custom Model Using Our Dataloader and Trainer
-We also provide the users the ability to fine-tune their own LLMs for code using our utility.  Below is an example that use the CausalLMTrainer to fine-tune a code summarization model based on the CodeXGLUE dataset. First, the ``model_class`` is the class that contain the supported models in our pipeline. Next, the ``dataloader`` is an instance from our ``CodeXGLUEDataLoader``. Then we can load the dataset part that has been processed into appropriate format for training. Finally, the datasets are fed into the ``CausalLMTrainer`` with other parameters to fine-tune a custom model.
+We also provide the users the ability to fine-tune their own LLMs for code using our utility.  Below is an example that use the CausalLMTrainer to fine-tune a code summarization model based on the CodeXGLUE dataset. First, the ``model_class`` is the class that contain the supported models in our pipeline. Next, the ``dataloader`` is an instance from our ``CodeXGLUEDataset``. Then we can load the dataset part that has been processed into appropriate format for training. Finally, the datasets are fed into the ``CausalLMTrainer`` with other parameters to fine-tune a custom model.
         
     
 ```python
