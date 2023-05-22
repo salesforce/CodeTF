@@ -39,7 +39,8 @@ The current version of the library offers:
 - **Fine-Tuning Your Own Models with Custom Datasets**: We provide an API for quickly fine-tuning your own LLMs for code using SOTA techniques for parameter-efficient fine-tuning (HuggingFace PEFT).
 - **Supported Tasks**: nl2code, code summarization, code completion, code translation, code refinement, clone detection, defect prediction.
 - **Datasets+**: We have preprocessed well-known benchmarks (Human-Eval, MBPP, CodeXGLUE, APPS) and offer an easy-to-load feature for these datasets.
-- **Pretrained Models**: We supply pretrained checkpoints of state-of-the-art foundational language models of code (CodeT5, CodeGen, CodeT5+).
+- **Model Evaluator**: We provide interface to evaluate models on well-known benchmarks (e.g. Human-Eval) on popular metrics (e.g., pass@k) with little effort (<span style="color:red">~15 LOCs</span>).
+- **Pretrained Models**: We supply pretrained checkpoints of state-of-the-art foundational language models of code (CodeBERT, CodeT5, CodeGen, CodeT5+, Incoder, StarCoder, etc.).
 - **Fine-Tuned Models**: We furnish fine-tuned checkpoints for 8+ downstream tasks.
 - **Utility to Manipulate Source Code**: We provide utilities to easily manipulate source code, such as user-friendly AST parsers in 15+ programming languages.
 
@@ -154,11 +155,36 @@ trainer.train()
 # trainer.evaluate(test_dataset=test_dataset)
 ```
 
-Comparing to [this script from StarCoder](https://github.com/bigcode-project/starcoder/blob/main/finetune/finetune.py), which requires almost 300 LOCs, we only need 14 LOCs to do the same !!!
+Comparing to [this script from StarCoder](https://github.com/bigcode-project/starcoder/blob/main/finetune/finetune.py), which requires ~300 LOCs to fine-tune a model, we only need 14 LOCs to do the same !!!
 
+
+## Evaluate on Well-Known Benchmarks
+Want to reproduce results of well-kwown benchmarks, such as Human Eval, but do not get the same numbers reported in the original papers and the evaluation process is complicated? We also got you covered with easy-to-user interface. Below is a sample to evaluate Human Eval using pass@k (k=[1,10,100]) as the metric.
+```
+from codetf.models import load_model_pipeline
+from codetf.data_utility.human_eval_dataset import HumanEvalDataset
+from codetf.performance.model_evaluator import ModelEvaluator
+
+os.environ["HF_ALLOW_CODE_EVAL"] = "1"
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
+
+model_class = load_model_pipeline(model_name="causal-lm", task="pretrained",
+            model_type="codegen-350M-mono", is_eval=True,
+            load_in_8bit=True, weight_sharding=False)
+
+dataset = HumanEvalDataset(tokenizer=model_class.get_tokenizer())
+prompt_token_ids, prompt_attention_masks, references= dataset.load()
+
+problems = TensorDataset(prompt_token_ids, prompt_attention_masks)
+
+evaluator = ModelEvaluator(model_class)
+avg_pass_at_k = evaluator.evaluate_pass_k(problems=problems, unit_tests=references)
+print("Pass@k: ", avg_pass_at_k)
+```
+
+Comparing to [this script from HuggingFace](https://github.com/huggingface/transformers/blob/main/examples/research_projects/codeparrot/scripts/human_eval.py), which requires ~230 LOCs to evaluate on pass@k, we only need 14 LOCs to do the same !!!
 
 ## Loading Preprocessed Data
-
 CodeTF provides the Dataset utility for several well-known datasets, such as CodeXGLUE, Human Eval, MBPP, and APPS. The following is an example of how to load the CodeXGLUE dataset:  
 
 ```python
@@ -169,6 +195,7 @@ tokenizer = RobertaTokenizer.from_pretrained("Salesforce/codet5-base", use_fast=
 dataset = CodeXGLUEDataset(tokenizer=tokenizer)
 train, test, validation = dataset.load(subset="text-to-code")
 ```
+
 
 ## Code utilities
 ### AST Parser in Multiple Languages
