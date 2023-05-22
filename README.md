@@ -36,13 +36,17 @@ In addition to the core tasks, CodeTF offers utilities for code manipulation acr
 The current version of the library offers:
 
 - **Fast Model Serving**: We support an easy-to-use interface for rapid inferencing with **pre-quantized models** (int8, int16, float16).
-- **Fine-Tuning Your Own Models with Custom Datasets**: We provide an API for quickly fine-tuning your own LLMs for code using SOTA techniques for **parameter-efficient fine-tuning** (HuggingFace PEFT).
+- **Fine-Tuning Your Own Models with Custom Datasets**: We provide an API for quickly fine-tuning your own LLMs for code using SOTA techniques for **parameter-efficient fine-tuning** (HuggingFace PEFT) on distributed environments.
 - **Supported Tasks**: nl2code, code summarization, code completion, code translation, code refinement, clone detection, defect prediction.
 - **Datasets+**: We have preprocessed well-known benchmarks (**Human-Eval, MBPP, CodeXGLUE, APPS, etc.**) and offer an easy-to-load feature for these datasets.
 - **Model Evaluator**: We provide interface to evaluate models on well-known benchmarks (e.g. Human-Eval) on popular metrics (e.g., pass@k) with little effort (**~15 LOCs**).
 - **Pretrained Models**: We supply pretrained checkpoints of state-of-the-art foundational language models of code (CodeBERT, CodeT5, CodeGen, CodeT5+, Incoder, StarCoder, etc.).
 - **Fine-Tuned Models**: We furnish fine-tuned checkpoints for 8+ downstream tasks.
 - **Utility to Manipulate Source Code**: We provide utilities to easily manipulate source code, such as user-friendly AST parsers (based on tree-sitter) in **15+ programming languages**, to extract important code features, such as function name, identifiers, etc.
+
+Important notes:
+- CodeTF is designed to complement and enhance the capabilities of HuggingFace, rather than replace it. It serves as a specialized layer specifically tailored for code intelligence tasks, such as fine-tuning language models with code-specific features and evaluating on well-known code intelligence benchmarks. If users require more customization, they are encouraged to write their own training code from scratch.
+- CodeTF leverages the powerful functionality provided by [Accelerate](https://github.com/huggingface/accelerate) for both inference and training. With Accelerate, users do not need to manually manage GPUs or CPU devices for most operations, allowing for a streamlined and efficient workflow.
 
 The following table shows the supported models with sizes and the tasks that the models support. This is a continuing effort and we are working on further growing the list.
     
@@ -124,9 +128,9 @@ There are a few notable arguments that need to be considered:
 -  ``model_name``: the name of the model, currently support ``codet5`` and ``causal-lm``. 
 -  ``model_type``: type of model for each model name, e.g. ``base``, ``codegen-350M-mono``, ``j-6B``, etc.
 -  ``load_in_8bit``: inherit the ``load_in_8bit" feature from [Huggingface Quantization](https://huggingface.co/docs/transformers/main/main_classes/quantization).
--  ``weight_sharding``: our advance feature that leverate [HuggingFace Sharded Checkpoint](https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch) to split a large model in several smaller shards in different GPUs.
+-  ``weight_sharding``: our advance feature that leverate [HuggingFace Sharded Checkpoint](https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch) to split a large model in several smaller shards in different GPUs. Please consider using this if you are dealing with large models.
 
-## Training Custom Model Using Our Trainer
+### Training Custom Model Using Our Trainer
 Want to train a custom LLM for code? We've got you covered. Below is an example using the ``CausalLMTrainer``, along with our dataset utilities, make it easy to fine-tune your models using the CodeXGLUE dataset. Here's an example:
     
 ```python
@@ -158,7 +162,7 @@ trainer.train()
 Comparing to [this script from StarCoder](https://github.com/bigcode-project/starcoder/blob/main/finetune/finetune.py), which requires ~300 LOCs to fine-tune a model, we only need 14 LOCs to do the same !!!
 
 
-## Evaluate on Well-Known Benchmarks
+### Evaluate on Well-Known Benchmarks
 Planning to reproduce the results of well-known benchmarks like ``Human-Eval``, but struggling with not achieving the same numbers as reported in the original papers? Worried about the complicated evaluation process? Don't worry, we've got you covered with an intuitive, easy-to-use interface. Here's a sample snippet demonstrating how to evaluate Human Eval using pass@k (k=[1,10,100]) as the metric:
 ```
 from codetf.models import load_model_pipeline
@@ -184,7 +188,7 @@ print("Pass@k: ", avg_pass_at_k)
 
 Comparing to [this script from HuggingFace](https://github.com/huggingface/transformers/blob/main/examples/research_projects/codeparrot/scripts/human_eval.py), which requires ~230 LOCs to evaluate on pass@k, we only need 14 LOCs to do the same !!!
 
-## Loading Preprocessed Data
+### Loading Preprocessed Data
 CodeTF provides the Dataset utility for several well-known datasets, such as CodeXGLUE, Human Eval, MBPP, and APPS. The following is an example of how to load the CodeXGLUE dataset:  
 
 ```python
@@ -198,11 +202,11 @@ train, test, validation = dataset.load(subset="text-to-code")
 
 The ``train``, ``test``, ``validation`` are returned in form of [Pytorch tensor](https://pytorch.org/docs/stable/tensors.html) to provide the flexilbity for the users to wrap it into higher-lever wrapper for their own use cases.
 
-## Code Utilities
+### Code Utilities
 In addition to providing utilities for LLMs, CodeTF also equips users with tools for effective source code manipulation. This is crucial in the code intelligence pipeline, where operations like parsing code into an Abstract Syntax Tree (AST) or extracting code attributes (such as function names or identifiers) are often required (CodeT5). These tasks can be challenging to execute, especially when setup and multi-language support is needed. Our code utility interface offers a streamlined solution, facilitating easy parsing and attribute extraction from code across 15+ languages.
 
 
-### AST Parser in Multiple Languages
+#### AST Parser in Multiple Languages
 
 CodeTF includes AST parsers compatible with numerous programming languages. Here's an example showcasing the parsing of Apex code into an AST:
 ```python
@@ -240,7 +244,7 @@ assert root_node.end_point == (3, 13)
 
 There are also other utilities for Java, Python, etc, that can perform the same operations. 
 
-### Extract Code Attributes
+#### Extract Code Attributes
 
 CodeTF provides an interface to easily extract code attributes. The following is a sample for extracting the function name of a Python function:
 
@@ -295,7 +299,7 @@ If you're using CodeTF in your research or applications, please cite using this 
       primaryClass={cs.CV}
 }
 ```
-
+          |
 ## Contact us
 If you have any questions, comments or suggestions, please do not hesitate to contact us at codetf@salesforce.com.
 
