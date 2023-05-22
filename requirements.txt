@@ -5,7 +5,6 @@ datasets==2.12.0
 evaluate==0.4.0
 huggingface-hub==0.14.1
 iopath==0.1.10
-lavis-unofficial==0.1.10
 nltk==3.8.1
 numpy==1.21.5
 omegaconf==2.3.0

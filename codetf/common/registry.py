@@ -30,25 +30,6 @@ class Registry:
         return wrap
 
     @classmethod
-    def register_processor(cls, name):
-        def wrap(processor_cls):
-            from lavis.processors import BaseProcessor
-
-            assert issubclass(
-                processor_cls, BaseProcessor
-            ), "All processors must inherit BaseProcessor class"
-            if name in cls.mapping["processor_name_mapping"]:
-                raise KeyError(
-                    "Name '{}' already registered for {}.".format(
-                        name, cls.mapping["processor_name_mapping"][name]
-                    )
-                )
-            cls.mapping["processor_name_mapping"][name] = processor_cls
-            return processor_cls
-
-        return wrap
-
-    @classmethod
     def register_lr_scheduler(cls, name):
         def wrap(lr_sched_cls):
             if name in cls.mapping["lr_scheduler_name_mapping"]:
