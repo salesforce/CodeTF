@@ -14,15 +14,11 @@ model_class = load_model_pipeline(model_name="causal-lm", task="pretrained",
 
 
 dataset = CodeXGLUEDataset(tokenizer=model_class.get_tokenizer())
-print(len(dataset.load(subset="text-to-code")))
 train, test, validation = dataset.load(subset="text-to-code")
 
 train_dataset = CustomDataset(train[0], train[1])
 test_dataset= CustomDataset(test[0], test[1])
 val_dataset= CustomDataset(validation[0], validation[1])
-
-print(len(train_dataset))
-print(len(val_dataset))
 
 evaluator = EvaluationMetric(metric="bleu", tokenizer=model_class.tokenizer)
 

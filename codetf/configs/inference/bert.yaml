@@ -1,0 +1,12 @@
+bert-codebert-base-pretrained:
+    huggingface_url: "microsoft/codebert-base"
+    tokenizer_url: "microsoft/codebert-base"
+    max_prediction_length: 512
+bert-unixcoder-base-pretrained:
+    huggingface_url: "microsoft/unixcoder-base"
+    tokenizer_url: "microsoft/unixcoder-base"
+    max_prediction_length: 512
+bert-codeberta-small-pretrained:
+    huggingface_url: "huggingface/CodeBERTa-small-v1"
+    tokenizer_url: "huggingface/CodeBERTa-small-v1"
+    max_prediction_length: 512

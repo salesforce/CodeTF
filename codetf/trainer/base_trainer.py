@@ -30,12 +30,6 @@ class BaseTrainer():
         self.train_dataset = train_dataset
         self.validation_dataset = validation_dataset
 
-        # self.training_args = self.get_default_codet5_hyperparameters()
-        # if training_args is None:
-            # self.training_args = self.get_default_codet5_hyperparameters()
-        # else:
-            # self.training_args = training_args
-
         # check for evaluator and evaluation_fn, cannot co-exist
         if evaluator is not None and evaluation_fn is not None:
             raise ValueError("evaluator and evaluation_fn cannot co-exist. Please choose one.")

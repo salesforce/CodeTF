@@ -7,11 +7,13 @@ from codetf.common.registry import registry
 from codetf.models.base_model import BaseModel
 from codetf.models.codet5_models import CodeT5Seq2SeqModel
 from codetf.models.causal_lm_models import CausalLMModel
+from codetf.models.bert_models import BertModel
 
 
 __all__ = [
     "CodeT5Seq2SeqModel",
-    "CausalLMModel"
+    "CausalLMModel",
+    "BertModel"
 ]
 
 # card_name_mapper = {

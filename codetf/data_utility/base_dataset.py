@@ -23,26 +23,9 @@ class BaseDataset():
         return dataset_config
 
     def process_data(self, data, padding="max_length", truncation=True):
-        
-        # data_tuples = []
-        # for d in data:
-        #     data_tuple = (d, use_max_length, padding, truncation)
-        #     data_tuples.append(data_tuple)
-
-        # with concurrent.futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()-5) as executor:
-        #     features = list(executor.map(lambda f: self._process_text(*f), tuple(data_tuples)))	
-
         outputs = self.tokenizer(data, padding=padding, truncation=truncation, return_tensors="pt", max_length=self.max_length)
-        # token_ids = torch.stack([f["input_ids"] for f in features]).squeeze(1)
         return outputs["input_ids"], outputs["attention_mask"]
     
-    # def _process_text(self, text, use_max_length=False, padding=False, truncation=False):  
-    #     if use_max_length:
-    #         outputs = self.tokenizer(text, max_length=self.max_length, padding="max_length", truncation=truncation, return_tensors="pt")
-    #     else:
-    #         outputs = self.tokenizer(text, padding="longest", truncation=truncation, return_tensors="pt")
-    #     return outputs
-
 class CustomDataset(Dataset):
 
     def __init__(self, input_ids, labels):

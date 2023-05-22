@@ -2,7 +2,6 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(".").absolute().parent))
 # sys.path.append("../")
-import torch
 from codetf.models import load_model_pipeline
 
 

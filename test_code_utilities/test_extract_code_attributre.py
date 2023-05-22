@@ -5,34 +5,31 @@ sys.path.append(str(Path(".").absolute().parent))
 from codetf.code_utility.apex.apex_code_utility import ApexCodeUtility
 
 
-def main():
-    apex_code_utility = ApexCodeUtility()
 
-    sample_codes = [
-        """
-       public class AccountWithContacts {
-        // Method to fetch accounts and their related contacts
-        public static void getAccountsWithContacts() {
-            // Query to fetch accounts with related contacts
-            List<Account> accounts = [SELECT Id, Name, (SELECT Id, LastName, Email FROM Contacts) FROM Account LIMIT 10];
+apex_code_utility = ApexCodeUtility()
 
-            // Iterate through accounts and print account and contact information to the debug log
-            for (Account acc : accounts) {
-                System.debug('Account Name: ' + acc.Name);
+sample_codes = 
+    """
+    public class AccountWithContacts {
+    // Method to fetch accounts and their related contacts
+    public static void getAccountsWithContacts() {
+        // Query to fetch accounts with related contacts
+        List<Account> accounts = [SELECT Id, Name, (SELECT Id, LastName, Email FROM Contacts) FROM Account LIMIT 10];
 
-                for (Contact con : acc.Contacts) {
-                    System.debug('Contact Name: ' + con.LastName + ', Email: ' + con.Email);
-                }
+        // Iterate through accounts and print account and contact information to the debug log
+        for (Account acc : accounts) {
+            System.debug('Account Name: ' + acc.Name);
+
+            for (Contact con : acc.Contacts) {
+                System.debug('Contact Name: ' + con.LastName + ', Email: ' + con.Email);
             }
         }
     }
-        """
-    ]
-
-    for sample_code in sample_codes:
-        code_attributes = apex_code_utility.get_code_attributes(sample_code)
-        print(code_attributes)
+}
+    """
 
 
-if __name__ == "__main__":
-    main()
+code_attributes = apex_code_utility.get_code_attributes(sample_code)
+print(code_attributes)
+
+
