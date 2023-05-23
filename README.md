@@ -13,7 +13,7 @@
   <img alt="license" src="https://img.shields.io/badge/python-3.8+-blue.svg"/>
   </a> 
   
-# CodeTF - A Comprehensive Transformer-based Library for Code LLM & Code Intelligence
+# CodeTF - A Transformer-based Library for Code LLM
 
 <!-- 
 [![Code License](https://img.shields.io/badge/Code%20License-Apache_2.0-green.svg)](https://github.com/bdqnghi/CodeTF_personal/blob/main/LICENSE)
@@ -47,10 +47,6 @@ The current version of the library offers:
 - **Fine-Tuned Models**: We furnish fine-tuned checkpoints for 8+ downstream tasks.
 - **Utility to Manipulate Source Code**: We provide utilities to easily manipulate source code, such as user-friendly AST parsers (based on tree-sitter) in **15+ programming languages**, to extract important code features, such as function name, identifiers, etc.
 
-Important notes:
-- CodeTF is designed to complement and enhance the capabilities of [HuggingFace Transformers](https://huggingface.co/docs/transformers/index), rather than replace it. It serves as a specialized layer specifically tailored for code intelligence tasks, such as fine-tuning language models with code-specific features and evaluating on well-known code intelligence benchmarks. If users require more customization, they are encouraged to write their own training code from scratch.
-- CodeTF leverages the powerful functionality provided by [Accelerate](https://github.com/huggingface/accelerate) for both inference and training. With Accelerate, users do not need to manually manage GPUs or CPU devices for most operations, allowing for a streamlined and efficient workflow.
-
 The following table shows the supported models with sizes and the tasks that the models support. This is a continuing effort and we are working on further growing the list.
     
 | Model      | Type              | Size                                      | Tasks                                                                                      |
@@ -59,9 +55,6 @@ The following table shows the supported models with sizes and the tasks that the
 | CodeGen    | Decoder           | 350M, 2B, 6B, 16B                         | Pretrained, Code Generation                                                                |
 | SantaCoder | Decoder           | 1.1B                                      | Pretrained, Code Generation                                                                |
 | StarCoder  | Decoder           | 15.5B                                     | Pretrained, Code Generation                                                                |
-| GPT        | Decoder           | j (1.3B), j (6B), Neox (20B)              | Pretrained, Code Generation                                                                |
-| GPT-Neo    | Decoder           | 1.3B                                      | Pretrained, Code Generation                                                                |
-| BLOOM      | Decoder           | 560M, 1.1B, 1.7B, 3B, 7.1B                | Pretrained, Code Generation                                                                |
 | Incoder    | Decoder           | 1B, 6B                                    | Pretrained, Code Generation                                                                |
 | CodeT5     | Encoder-Decoder   | Small (125M), Medium (220M), Large (770M) | Pretrained, Code Sum, Code Generation, Code Refinement, Defect Prediction, Clone Detection |
 | CodeT5+    | Encoder-Decoder   | 220M, 770M, 2B, 6B, 16B                   | Pretrained, Code Generation                                                                |
@@ -287,14 +280,18 @@ You can find more examples for each use case:
 - [Model Evaluate](https://github.com/salesforce/CodeTF/tree/main/test_evaluator)
 - [Code Utility](https://github.com/salesforce/CodeTF/tree/main/test_code_utilities)
 
+## Notes:
+- CodeTF is designed to complement and enhance the capabilities of [HuggingFace Transformers](https://huggingface.co/docs/transformers/index), rather than replace it. It serves as a specialized layer specifically tailored for code intelligence tasks, such as fine-tuning language models with code-specific features and evaluating on well-known code intelligence benchmarks. If users require more customization, they are encouraged to write their own training code from scratch.
+- CodeTF leverages the powerful functionality provided by [Accelerate](https://github.com/huggingface/accelerate) for both inference and training. With Accelerate, users do not need to manually manage GPUs or CPU devices for most operations, allowing for a streamlined and efficient workflow.
+- 
 ## Technical Report and Citing CodeTF
-You can find more details in our [technical report](https://arxiv.org/abs/2209.09019).
+You can find more details in our [technical report](https://arxiv.org).
 
 If you're using CodeTF in your research or applications, please cite using this BibTeX:
 ```bibtex
 @misc{nghi2023codetf,
       title={CodeTF: A Transformer-based Library for CodeLLM & Code Intelligence}, 
-      author={Nghi D. Q. Bui, Henry Le, Yue Wang, Akhilesh Deepak Gotmare, Junna Li, Steven Hoi.},
+      author={Nghi D. Q. Bui, Henry Le, Yue Wang, Akhilesh Deepak Gotmare, Junnan Li, Steven Hoi.},
       year={2023},
       eprint={2209.09019},
       archivePrefix={arXiv},
