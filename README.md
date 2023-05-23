@@ -39,7 +39,7 @@ In addition to the core tasks, CodeTF offers utilities for code manipulation acr
 The current version of the library offers:
 
 - **Fast Model Serving**: We support an easy-to-use interface for rapid inferencing with **pre-quantized models** (int8, int16, float16).
-- **Fine-Tuning Your Own Models with Custom Datasets**: We provide an API for quickly fine-tuning your own LLMs for code using SOTA techniques for **parameter-efficient fine-tuning** (HuggingFace PEFT) on distributed environments.
+- **Fine-Tuning Your Own Models**: We provide an API for quickly fine-tuning your own LLMs for code using SOTA techniques for **parameter-efficient fine-tuning** (HuggingFace PEFT) on distributed environments.
 - **Supported Tasks**: nl2code, code summarization, code completion, code translation, code refinement, clone detection, defect prediction.
 - **Datasets+**: We have preprocessed well-known benchmarks (**Human-Eval, MBPP, CodeXGLUE, APPS, etc.**) and offer an easy-to-load feature for these datasets.
 - **Model Evaluator**: We provide interface to evaluate models on well-known benchmarks (e.g. Human-Eval) on popular metrics (e.g., pass@k) with little effort (**~15 LOCs**).
@@ -303,4 +303,4 @@ If you're using CodeTF in your research or applications, please cite using this 
 If you have any questions, comments or suggestions, please do not hesitate to contact us at codetf@salesforce.com.
 
 ## License
-[BSD 3-Clause License](LICENSE.txt)
+[Apache License Version 2.0](LICENSE.txt)
