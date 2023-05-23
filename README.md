@@ -53,15 +53,15 @@ The following table shows the supported models with sizes and the tasks that the
 | Model      | Type              | Size                                      | Tasks                                                                                      |
 |------------|-------------------|-------------------------------------------|--------------------------------------------------------------------------------------------|
 | CodeBERT   | Encoder           | Base (160M), Small (84M)                  | Pretrained, MLM                                                                            |
-| CodeGen    | Decoder           | 350M, 2B, 6B, 16B                         | Pretrained                                                                                 |
-| SantaCoder | Decoder           | 1.1B                                      | Pretrained                                                                                 |
-| StarCoder  | Decoder           | 15.5B                                     | Pretrained                                                                                 |
-| GPT        | Decoder           | j (1.3B), j (6B), Neox (20B)              | Pretrained                                                                                 |
-| GPT-Neo    | Decoder           | 1.3B                                      | Pretrained                                                                                 |
-| BLOOM      | Decoder           | 560M, 1.1B, 1.7B, 3B, 7.1B                | Pretrained                                                                                 |
-| Incoder    | Decoder           | 1B, 6B                                    | Pretrained                                                                                 |
+| CodeGen    | Decoder           | 350M, 2B, 6B, 16B                         | Pretrained, Code Generation                                                                |
+| SantaCoder | Decoder           | 1.1B                                      | Pretrained, Code Generation                                                                |
+| StarCoder  | Decoder           | 15.5B                                     | Pretrained, Code Generation                                                                |
+| GPT        | Decoder           | j (1.3B), j (6B), Neox (20B)              | Pretrained, Code Generation                                                                |
+| GPT-Neo    | Decoder           | 1.3B                                      | Pretrained, Code Generation                                                                |
+| BLOOM      | Decoder           | 560M, 1.1B, 1.7B, 3B, 7.1B                | Pretrained, Code Generation                                                                |
+| Incoder    | Decoder           | 1B, 6B                                    | Pretrained, Code Generation                                                                |
 | CodeT5     | Encoder-Decoder   | Small (125M), Medium (220M), Large (770M) | Pretrained, Code Sum, Code Generation, Code Refinement, Defect Prediction, Clone Detection |
-| CodeT5+    | Encoder-Decoder   | 220M, 770M, 2B, 6B, 16B                   | Pretrained                                                                                 |
+| CodeT5+    | Encoder-Decoder   | 220M, 770M, 2B, 6B, 16B                   | Pretrained, Code Generation                                                                |
 
 
 ## Installation Guide
