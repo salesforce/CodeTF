@@ -25,7 +25,10 @@
   - [Introduction](#introduction)
   - [Installation](#installation-guide)
   - [Getting Started](#getting-started)
-  - [Code Utilities](#code-utilities)
+    - [Inferencing Pipeline](#inferencing-pipeline)
+    - [Fine-Tuning Your Own Model](#fine-tuning-pipeline)
+    - [Evaluate On Well-Known Benchmarks](#evaluate-on-well-known-benchmarks)
+    - [Utilities to Manipulate Source Code Based on AST](#code-utilities)
   - [License](#license)
 
 ## Introduction
@@ -130,7 +133,7 @@ There are a few notable arguments that need to be considered:
 -  ``load_in_8bit``: inherit the ``load_in_8bit" feature from [Huggingface Quantization](https://huggingface.co/docs/transformers/main/main_classes/quantization).
 -  ``weight_sharding``: our advance feature that leverate [HuggingFace Sharded Checkpoint](https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch) to split a large model in several smaller shards in different GPUs. Please consider using this if you are dealing with large models.
 
-### Training Custom Model Using Our Trainer
+### Fine-Tuning Pipeline
 Want to train a custom LLM for code? We've got you covered. Below is an example using the ``CausalLMTrainer``, along with our dataset utilities, make it easy to fine-tune your models using the CodeXGLUE dataset. Here's an example:
     
 ```python
