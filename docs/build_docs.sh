@@ -89,7 +89,7 @@ while read -r filename; do
 <!DOCTYPE html>
 <html>
    <head>
-      <title>LAVIS Documentation</title>
+      <title>CodeTF Documentation</title>
       <meta http-equiv = "refresh" content="0; url='$url'" />
    </head>
    <body>
