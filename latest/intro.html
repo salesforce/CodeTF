@@ -233,20 +233,22 @@
 <ol class="arabic simple">
 <li><p>(Optional) Creating conda environment</p></li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>lavis<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>codetf<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8
 conda<span class="w"> </span>activate<span class="w"> </span>codetf
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li><p>Cloning and building from source</p></li>
+<li><p>Install from PyPI</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>salesforce-codetf
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>If you would like to develop on CodeTF, you can do</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/salesforce/CodeTF.git
 <span class="nb">cd</span><span class="w"> </span>CodeTF
 pip<span class="w"> </span>install<span class="w"> </span>.
-</pre></div>
-</div>
-<p>If you would like to develop on CodeTF, you may find it easier to build with editable mode:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 </pre></div>
 </div>
 </section>
