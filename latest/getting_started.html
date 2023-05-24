@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Model Serving Pipeline &mdash; CodeTF  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="What is CodeTF?" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CodeTF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is CodeTF?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html#supported-tasks-models">Supported Tasks, Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html#library-design">Library Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html#installation">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model Serving Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#fine-tuning-custom-model-using-our-trainer">Fine-Tuning Custom Model Using Our Trainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#evaluate-on-well-known-benchmarks">Evaluate on Well-Known Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#loading-preprocessed-data">Loading Preprocessed Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#code-utilities">Code Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ast-parser-in-multiple-languages">AST Parser in Multiple Languages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extract-code-attributes">Extract Code Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#remove-comments">Remove Comments</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CodeTF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Model Serving Pipeline</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="model-serving-pipeline">
+<h1>Model Serving Pipeline<a class="headerlink" href="#model-serving-pipeline" title="Permalink to this heading"></a></h1>
+<p>Getting started with CodeTF is simple and quick with our model loading pipeline function <code class="docutils literal notranslate"><span class="pre">load_model_pipeline()</span></code>. Here’s an example showing how to load codet5 models and perform inference on code translation and code summarization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">codetf.models</span> <span class="kn">import</span> <span class="n">load_model_pipeline</span>
+
+<span class="n">translation_model</span> <span class="o">=</span> <span class="n">load_model_pipeline</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;codet5&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;translate-cs-java&quot;</span><span class="p">,</span>
+            <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;base&quot;</span><span class="p">,</span> <span class="n">is_eval</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">load_in_8bit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weight_sharding</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">summarization_model</span> <span class="o">=</span> <span class="n">load_model_pipeline</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;codet5&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;sum-python&quot;</span><span class="p">,</span>
+            <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;base&quot;</span><span class="p">,</span> <span class="n">is_eval</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">load_in_8bit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weight_sharding</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">code_snippets</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    void bubbleSort(int arr[])</span>
+<span class="s2">    {</span>
+<span class="s2">        int n = arr.length;</span>
+<span class="s2">        for (int i = 0; i &lt; n - 1; i++)</span>
+<span class="s2">            for (int j = 0; j &lt; n - i - 1; j++)</span>
+<span class="s2">                if (arr[j] &gt; arr[j + 1]) {</span>
+<span class="s2">                    // swap arr[j+1] and arr[j]</span>
+<span class="s2">                    int temp = arr[j];</span>
+<span class="s2">                    arr[j] = arr[j + 1];</span>
+<span class="s2">                    arr[j + 1] = temp;</span>
+<span class="s2">                }</span>
+<span class="s2">    }</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">translated_code_snippets</span> <span class="o">=</span> <span class="n">translation_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">code_snippets</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">translated_code_snippets</span><span class="p">)</span>
+
+<span class="n">summaries</span> <span class="o">=</span> <span class="n">summarization_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">code_snippets</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summaries</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There are a few notable arguments that need to be considered:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model_name</span></code>: the name of the model, currently support <code class="docutils literal notranslate"><span class="pre">codet5</span></code> and <code class="docutils literal notranslate"><span class="pre">causal-lm</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_type</span></code>: type of model for each model name, e.g. <code class="docutils literal notranslate"><span class="pre">base</span></code>, <code class="docutils literal notranslate"><span class="pre">codegen-350M-mono</span></code>, <code class="docutils literal notranslate"><span class="pre">j-6B</span></code>, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load_in_8bit</span></code>: inherit the <code class="docutils literal notranslate"><span class="pre">load_in_8bit&quot;</span> <span class="pre">feature</span> <span class="pre">from</span> <span class="pre">`Huggingface</span> <span class="pre">Quantization</span> <span class="pre">&lt;https://huggingface.co/docs/transformers/main/main_classes/quantization&gt;`_</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weight_sharding</span></code>: our advance feature that leverate <a class="reference external" href="https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch">HuggingFace Sharded Checkpoint</a> to split a large model in several smaller shards in different GPUs. Please consider using this if you are dealing with large models.</p></li>
+</ul>
+</section>
+<section id="fine-tuning-custom-model-using-our-trainer">
+<h1>Fine-Tuning Custom Model Using Our Trainer<a class="headerlink" href="#fine-tuning-custom-model-using-our-trainer" title="Permalink to this heading"></a></h1>
+<p>Want to train a custom LLM for code? We’ve got you covered. Below is an example using the <code class="docutils literal notranslate"><span class="pre">CausalLMTrainer</span></code>, along with our dataset utilities, make it easy to fine-tune your models using the CodeXGLUE dataset. Here’s an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">codetf.trainer.causal_lm_trainer</span> <span class="kn">import</span> <span class="n">CausalLMTrainer</span>
+<span class="kn">from</span> <span class="nn">codetf.data_utility.codexglue_dataset</span> <span class="kn">import</span> <span class="n">CodeXGLUEDataset</span>
+<span class="kn">from</span> <span class="nn">codetf.models</span> <span class="kn">import</span> <span class="n">load_model_pipeline</span>
+<span class="kn">from</span> <span class="nn">codetf.performance.evaluate</span> <span class="kn">import</span> <span class="n">EvaluationMetric</span>
+
+<span class="n">model_class</span> <span class="o">=</span> <span class="n">load_model_pipeline</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;causal-lm&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;pretrained&quot;</span><span class="p">,</span>
+                <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;starcoder-15.5B&quot;</span><span class="p">,</span> <span class="n">is_eval</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">load_in_8bit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">weight_sharding</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="n">dataloader</span> <span class="o">=</span> <span class="n">CodeXGLUEDataset</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">=</span><span class="n">model_class</span><span class="o">.</span><span class="n">get_tokenizer</span><span class="p">())</span>
+<span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">,</span> <span class="n">val_dataset</span> <span class="o">=</span> <span class="n">dataloader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;text-to-code&quot;</span><span class="p">)</span>
+
+<span class="n">evaluator</span> <span class="o">=</span> <span class="n">EvaluationMetric</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="s2">&quot;bleu&quot;</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">model_class</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">)</span>
+
+<span class="c1"># peft can be in [&quot;lora&quot;, &quot;prefixtuning&quot;]</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">CausalLMTrainer</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span>
+                        <span class="n">validation_dataset</span><span class="o">=</span><span class="n">val_dataset</span><span class="p">,</span>
+                        <span class="n">peft</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">pretrained_model_or_path</span><span class="o">=</span><span class="n">model_class</span><span class="o">.</span><span class="n">get_model</span><span class="p">(),</span>
+                        <span class="n">tokenizer</span><span class="o">=</span><span class="n">model_class</span><span class="o">.</span><span class="n">get_tokenizer</span><span class="p">())</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+<span class="c1"># trainer.evaluate(test_dataset=test_dataset)</span>
+</pre></div>
+</div>
+<p>Comparing to <a class="reference external" href="https://github.com/bigcode-project/starcoder/blob/main/finetune/finetune.py">this script from StarCoder</a>, which requires ~300 LOCs to fine-tune a model, we only need 14 LOCs to do the same !!!</p>
+</section>
+<section id="evaluate-on-well-known-benchmarks">
+<h1>Evaluate on Well-Known Benchmarks<a class="headerlink" href="#evaluate-on-well-known-benchmarks" title="Permalink to this heading"></a></h1>
+<p>Planning to reproduce the results of well-known benchmarks like <code class="docutils literal notranslate"><span class="pre">Human-Eval</span></code>, but struggling with not achieving the same numbers as reported in the original papers? Worried about the complicated evaluation process? Don’t worry, we’ve got you covered with an intuitive, easy-to-use interface. Here’s a sample snippet demonstrating how to evaluate Human Eval using pass&#64;k (k=[1,10,100]) as the metric:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">codetf.models</span> <span class="kn">import</span> <span class="n">load_model_pipeline</span>
+<span class="kn">from</span> <span class="nn">codetf.data_utility.human_eval_dataset</span> <span class="kn">import</span> <span class="n">HumanEvalDataset</span>
+<span class="kn">from</span> <span class="nn">codetf.performance.model_evaluator</span> <span class="kn">import</span> <span class="n">ModelEvaluator</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;HF_ALLOW_CODE_EVAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TOKENIZERS_PARALLELISM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+
+<span class="n">model_class</span> <span class="o">=</span> <span class="n">load_model_pipeline</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;causal-lm&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;pretrained&quot;</span><span class="p">,</span>
+            <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;codegen-350M-mono&quot;</span><span class="p">,</span> <span class="n">is_eval</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">load_in_8bit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weight_sharding</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">HumanEvalDataset</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">=</span><span class="n">model_class</span><span class="o">.</span><span class="n">get_tokenizer</span><span class="p">())</span>
+<span class="n">prompt_token_ids</span><span class="p">,</span> <span class="n">prompt_attention_masks</span><span class="p">,</span> <span class="n">references</span><span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+<span class="n">problems</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">prompt_token_ids</span><span class="p">,</span> <span class="n">prompt_attention_masks</span><span class="p">)</span>
+
+<span class="n">evaluator</span> <span class="o">=</span> <span class="n">ModelEvaluator</span><span class="p">(</span><span class="n">model_class</span><span class="p">)</span>
+<span class="n">avg_pass_at_k</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate_pass_k</span><span class="p">(</span><span class="n">problems</span><span class="o">=</span><span class="n">problems</span><span class="p">,</span> <span class="n">unit_tests</span><span class="o">=</span><span class="n">references</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Pass@k: &quot;</span><span class="p">,</span> <span class="n">avg_pass_at_k</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Comparing to <a class="reference external" href="https://github.com/huggingface/transformers/blob/main/examples/research_projects/codeparrot/scripts/human_eval.py">this script from HuggingFace</a>, which requires ~230 LOCs to evaluate on pass&#64;k, we only need 14 LOCs to do the same !!!</p>
+</section>
+<section id="loading-preprocessed-data">
+<h1>Loading Preprocessed Data<a class="headerlink" href="#loading-preprocessed-data" title="Permalink to this heading"></a></h1>
+<p>CodeTF provides the Dataset utility for several well-known datasets, such as CodeXGLUE, Human Eval, MBPP, and APPS. The following is an example of how to load the CodeXGLUE dataset:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">codetf.data_utility.codexglue_dataset</span> <span class="kn">import</span> <span class="n">CodeXGLUEDataset</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">RobertaTokenizer</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">RobertaTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;Salesforce/codet5-base&quot;</span><span class="p">,</span> <span class="n">use_fast</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">CodeXGLUEDataset</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">validation</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;text-to-code&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">test</span></code>, <code class="docutils literal notranslate"><span class="pre">validation</span></code> are returned in form of <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html">Pytorch tensor</a> to provide the flexilbity for the users to wrap it into higher-lever wrapper for their own use cases.</p>
+</section>
+<section id="code-utilities">
+<h1>Code Utilities<a class="headerlink" href="#code-utilities" title="Permalink to this heading"></a></h1>
+<p>In addition to providing utilities for LLMs, CodeTF also equips users with tools for effective source code manipulation. This is crucial in the code intelligence pipeline, where operations like parsing code into an Abstract Syntax Tree (AST) or extracting code attributes (such as function names or identifiers) are often required (CodeT5). These tasks can be challenging to execute, especially when setup and multi-language support is needed. Our code utility interface offers a streamlined solution, facilitating easy parsing and attribute extraction from code across 15+ languages.</p>
+<section id="ast-parser-in-multiple-languages">
+<h2>AST Parser in Multiple Languages<a class="headerlink" href="#ast-parser-in-multiple-languages" title="Permalink to this heading"></a></h2>
+<p>CodeTF includes AST parsers compatible with numerous programming languages. Here’s an example showcasing the parsing of Apex code into an AST:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">codetf.code_utility.apex.apex_code_utility</span> <span class="kn">import</span> <span class="n">ApexCodeUtility</span>
+
+<span class="n">apex_code_utility</span> <span class="o">=</span> <span class="n">ApexCodeUtility</span><span class="p">()</span>
+
+<span class="n">sample_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    public class SampleClass {</span>
+<span class="s2">        public Integer myNumber;</span>
+
+<span class="s2">        **</span>
+<span class="s2">        * This is a method that returns the value of myNumber.</span>
+<span class="s2">        * @return An integer value</span>
+<span class="s2">        */</span>
+<span class="s2">        public Integer getMyNumber() {</span>
+<span class="s2">            // Return the current value of myNumber</span>
+<span class="s2">            return this.myNumber;</span>
+<span class="s2">        }</span>
+<span class="s2">    }</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">ast</span> <span class="o">=</span> <span class="n">apex_code_utility</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">sample_code</span><span class="p">)</span>
+
+<span class="c1"># This will print the tree-sitter AST object</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ast</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Then you can traverse the tree using the interface from <a class="reference external" href="https://github.com/tree-sitter/py-tree-sitter">py-tree-sitter</a></dt><dd><dl class="simple">
+<dt>::</dt><dd><p>root_node = ast.root_node
+assert root_node.type == ‘module’
+assert root_node.start_point == (1, 0)
+assert root_node.end_point == (3, 13)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>There are also other utilities for Java, Python, etc, that can perform the same operations.</p>
+</section>
+<section id="extract-code-attributes">
+<h2>Extract Code Attributes<a class="headerlink" href="#extract-code-attributes" title="Permalink to this heading"></a></h2>
+<p>CodeTF provides an interface to easily extract code attributes. The following is a sample for extracting the function name of a Python function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">code_attributes</span> <span class="o">=</span> <span class="n">apex_code_utility</span><span class="o">.</span><span class="n">get_code_attributes</span><span class="p">(</span><span class="n">sample_code</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">code_attributes</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>This will print:</dt><dd><dl class="simple">
+<dt>::</dt><dd><p>{‘class_names’: [‘AccountWithContacts’], ‘method_names’: [‘getAccountsWithContacts’], ‘comments’: [], ‘variable_names’: [‘acc’, ‘accounts’, ‘con’, ‘System’, ‘debug’, ‘Contacts’, ‘Id’, ‘Name’, ‘Account’, ‘Email’, ‘LastName’]}</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="remove-comments">
+<h2>Remove Comments<a class="headerlink" href="#remove-comments" title="Permalink to this heading"></a></h2>
+<p>There are other existing utilities, such as removing comments from code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">new_code_snippet</span> <span class="o">=</span> <span class="n">apex_code_utility</span><span class="o">.</span><span class="n">remove_comments</span><span class="p">(</span><span class="n">sample_code</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">new_code_snippet</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will print:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">SampleClass</span> <span class="p">{</span>
+    <span class="n">public</span> <span class="n">Integer</span> <span class="n">myNumber</span><span class="p">;</span>
+    <span class="n">public</span> <span class="n">Integer</span> <span class="n">getMyNumber</span><span class="p">()</span> <span class="p">{</span>
+        <span class="o">//</span> <span class="n">Return</span> <span class="n">the</span> <span class="n">current</span> <span class="n">value</span> <span class="n">of</span> <span class="n">myNumber</span>
+        <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">myNumber</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="What is CodeTF?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, salesforce.com inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
