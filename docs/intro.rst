@@ -18,6 +18,9 @@ This library aims to provide engineers and researchers with a one-stop solution 
 - **Fine-Tuned Models**: We furnish fine-tuned checkpoints for 8+ downstream tasks.
 - **Utility to Manipulate Source Code**: We provide utilities to easily manipulate source code, such as user-friendly AST parsers (based on tree-sitter) in **15+ programming languages**, to extract important code features, such as function name, identifiers, etc.
 
+.. image:: _static/overview.png
+  :width: 600
+
 Supported Tasks, Models 
 ####################################
 
@@ -51,8 +54,8 @@ The following table shows the supported models with sizes and the tasks that the
 Library Design
 ####################################
 
-.. image:: _static/architecture.pdf
-  :width: 550
+.. image:: _static/architecture.png
+  :width: 600
 
 CodeTF has 7 key modules.
 
@@ -101,4 +104,3 @@ Installation
 If you would like to develop on CodeTF, you may find it easier to build with editable mode::
 
    pip install -e .
-
