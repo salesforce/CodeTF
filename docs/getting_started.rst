@@ -191,12 +191,13 @@ There are other existing utilities, such as removing comments from code:
     print(new_code_snippet)
 
 This will print:
-    ::
-        public class SampleClass {    
-            public Integer myNumber;
-            public Integer getMyNumber() {
-                // Return the current value of myNumber
-                return this.myNumber;
-            }
+
+.. code-block:: python
+    
+    public class SampleClass {    
+        public Integer myNumber;
+        public Integer getMyNumber() {
+            // Return the current value of myNumber
+            return this.myNumber;
         }
-"""
+    }
