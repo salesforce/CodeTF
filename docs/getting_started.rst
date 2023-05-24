@@ -41,7 +41,7 @@ There are a few notable arguments that need to be considered:
 
 - ``model_name``: the name of the model, currently support ``codet5`` and ``causal-lm``. 
 - ``model_type``: type of model for each model name, e.g. ``base``, ``codegen-350M-mono``, ``j-6B``, etc.
-- ``load_in_8bit``: inherit the ``load_in_8bit" feature from `Huggingface Quantization <https://huggingface.co/docs/transformers/main/main_classes/quantization>`_.
+- ``load_in_8bit``: inherit the ``load_in_8bit" feature from `Huggingface Quantization <https://huggingface.co/docs/transformers/main/main_classes/quantization>`_``.
 - ``weight_sharding``: our advance feature that leverate `HuggingFace Sharded Checkpoint <https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch>`_ to split a large model in several smaller shards in different GPUs. Please consider using this if you are dealing with large models.
 
 Fine-Tuning Custom Model Using Our Trainer
@@ -193,7 +193,7 @@ There are other existing utilities, such as removing comments from code:
 This will print:
 
 .. code-block:: python
-    
+
     public class SampleClass {    
         public Integer myNumber;
         public Integer getMyNumber() {
