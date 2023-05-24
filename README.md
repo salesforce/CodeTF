@@ -230,7 +230,7 @@ ast = apex_code_utility.parse(sample_code)
 print(ast)
 ```
 
-Then you can traverse the tree using the interface from [py-tree-sitter](https://github.com/tree-sitter/py-tree-sitter
+Then you can traverse the tree using the interface from [py-tree-sitter](https://github.com/tree-sitter/py-tree-sitter)
 ```
 root_node = ast.root_node
 assert root_node.type == 'module'
