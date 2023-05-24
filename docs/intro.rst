@@ -89,17 +89,19 @@ Installation
 
 .. code-block:: bash
 
-   conda create -n lavis python=3.8
+   conda create -n codetf python=3.8
    conda activate codetf
 
-2. Cloning and building from source
+2. Install from PyPI
+
+.. code-block:: bash
+
+   pip install salesforce-codetf
+
+3. If you would like to develop on CodeTF, you can do
 
 .. code-block:: bash
 
    git clone https://github.com/salesforce/CodeTF.git
    cd CodeTF
    pip install .
-
-If you would like to develop on CodeTF, you may find it easier to build with editable mode::
-
-   pip install -e .
