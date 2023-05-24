@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to CodeTF's documentation!
-=================================
+==================================
 
 .. toctree::
    :maxdepth: 1
