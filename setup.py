@@ -8,7 +8,7 @@ install_requires = [
     "huggingface-hub==0.14.1",
     "iopath==0.1.10",
     "nltk==3.8.1",
-    "numpy==1.21.5",
+    "numpy==1.22.0",
     "omegaconf==2.3.0",
     "pandas==1.3.5",
     "peft==0.3.0",
