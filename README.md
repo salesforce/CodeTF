@@ -71,7 +71,7 @@ conda activate codetf
 
 2. Install from [PyPI](https://pypi.org/project/salesforce-codetf/):
 ```bash
-pip install codetf
+pip install salesforce-codetf
 ```
     
 3. Alternatively, build CodeTF from source:
@@ -79,7 +79,7 @@ pip install codetf
 ```bash
 git clone https://github.com/salesforce/CodeTF.git
 cd CodeTF
-pip install -e .
+pip install .
 ```
 
 ## Getting Started
