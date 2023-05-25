@@ -160,7 +160,7 @@ Comparing to [this script from StarCoder](https://github.com/bigcode-project/sta
 
 ### Evaluate on Well-Known Benchmarks
 Planning to reproduce the results of well-known benchmarks like ``Human-Eval``, but struggling with not achieving the same numbers as reported in the original papers? Worried about the complicated evaluation process? Don't worry, we've got you covered with an intuitive, easy-to-use interface. Here's a sample snippet demonstrating how to evaluate Human Eval using pass@k (k=[1,10,100]) as the metric:
-```
+```python
 from codetf.models import load_model_pipeline
 from codetf.data_utility.human_eval_dataset import HumanEvalDataset
 from codetf.performance.model_evaluator import ModelEvaluator
