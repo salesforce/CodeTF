@@ -13,7 +13,7 @@
   <img alt="license" src="https://img.shields.io/badge/python-3.8+-blue.svg"/>
   </a> 
   
-# CodeTF - A Transformer-based Library for Code LLM
+# CodeTF - A One-stop Transformer Library for State-of-the-art Code LLM
 
 <!-- 
 [![Code License](https://img.shields.io/badge/Code%20License-Apache_2.0-green.svg)](https://github.com/bdqnghi/CodeTF_personal/blob/main/LICENSE)
