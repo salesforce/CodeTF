@@ -126,6 +126,46 @@ There are a few notable arguments that need to be considered:
 -  ``load_in_8bit``: inherit the ``load_in_8bit" feature from [Huggingface Quantization](https://huggingface.co/docs/transformers/main/main_classes/quantization).
 -  ``weight_sharding``: our advance feature that leverate [HuggingFace Sharded Checkpoint](https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch) to split a large model in several smaller shards in different GPUs. Please consider using this if you are dealing with large models.
 
+### Model Zoo
+You might want to view all of the supported models. To do this, you can use the ``model_zoo()``:
+```python
+from codetf.models import model_zoo
+print(model_zoo)
+# ============================================================================================================
+# Architectures                  Types                           Tasks
+# ============================================================================================================
+# causallm                       codegen-350M-mono              pretrained
+#                                codegen-350M-multi             pretrained
+#                                codegen-350M-nl                pretrained
+#                                codegen-2B-mono                pretrained
+#                                codegen-2B-multi               pretrained
+#                                codegen-2B-nl                  pretrained
+#                                codegen-6B-mono                pretrained
+#                                codegen-6B-nl                  pretrained
+#                                codegen-6B-multi               pretrained
+#                                starcoder-15.5B                pretrained
+#                                gpt-neox-20B                   pretrained
+#                                gpt-neo-1.3B                   pretrained
+#                                gpt-j-6B                       pretrained
+#                                incoder-6B                     pretrained
+# codet5                         base-multi-sum                 pretrained
+#                                base                           nl2code
+#                                base                           refine
+#                                base-translate-cs              java
+#                                base-translate-java            cs
+#                                base-sum                       python
+#                                base-sum                       go
+#                                base-sum                       php
+#                                base-sum                       javascript
+#                                base-sum                       java
+#                                base-sum                       ruby
+#                                base                           clone
+#                                base                           defect
+# bert                           codebert-base                  pretrained
+#                                unixcoder-base                 pretrained
+#                                codeberta-small                pretrained
+```
+
 ### Fine-Tuning Pipeline
 Want to train a custom LLM for code? We've got you covered. Below is an example using the ``CausalLMTrainer``, along with our dataset utilities, make it easy to fine-tune your models using the CodeXGLUE dataset. Here's an example:
     
