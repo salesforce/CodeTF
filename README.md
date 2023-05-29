@@ -280,9 +280,14 @@ You can find more examples for each use case:
 - [Model Evaluate](https://github.com/salesforce/CodeTF/tree/main/test_evaluator)
 - [Code Utility](https://github.com/salesforce/CodeTF/tree/main/test_code_utilities)
 
-## Notes:
+## Notes
 - CodeTF is designed to complement and enhance the capabilities of [HuggingFace Transformers](https://huggingface.co/docs/transformers/index), rather than replace it. It serves as a specialized layer specifically tailored for code intelligence tasks, such as fine-tuning language models with code-specific features and evaluating on well-known code intelligence benchmarks. If users require more customization, they are encouraged to write their own training code from scratch.
 - CodeTF leverages the powerful functionality provided by [Accelerate](https://github.com/huggingface/accelerate) for both inference and training. With Accelerate, users do not need to manually manage GPUs or CPU devices for most operations, allowing for a streamlined and efficient workflow.
+
+## Ethical and Responsible Use
+CodeTF, while powerful, does not guarantee infallible code intelligence capabilities. Users may encounter inaccuracies or biases, possibly leading to misinterpretations or undesired behaviors. Risks include the generation of insecure code, propagation of poor coding practices, or inadvertent revelation of sensitive data. We strongly advise users to examine the pretrained models and system before practical adoption. CodeTF facilitates effective code analysis, prediction, and debugging, promoting reproducible research and development. We encourage its responsible use for enhancing software quality and developer productivity.
+
+However, misuse can lead to unethical outcomes such as unauthorized code manipulation, privacy breaches, or insecure coding practices. Users should familiarize themselves with guidelines for responsible AI before using CodeTF. Our commitment is to continually refine the library by identifying and mitigating potential biases and inappropriate behaviors. Users should review the models and system before practical implementation, and contribute towards refining the library to ensure ethical usage.
 
 ## Technical Report and Citing CodeTF
 You can find more details in our [technical report](https://arxiv.org).
