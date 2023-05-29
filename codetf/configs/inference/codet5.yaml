@@ -76,3 +76,45 @@ codet5-base-defect:
     max_source_length: 512
     max_prediction_length: 512
     beam_size: 5
+codet5-plus-instruct-16B-pretrained:
+    huggingface_url: "Salesforce/instructcodet5p-16b"
+    tokenizer_url: "Salesforce/instructcodet5p-16b"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-plus-16B-pretrained:
+    huggingface_url: "Salesforce/codet5p-16b"
+    tokenizer_url: "Salesforce/codet5p-16b"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-plus-6B-pretrained:
+    huggingface_url: "Salesforce/codet5p-6b"
+    tokenizer_url: "Salesforce/codet5p-6b"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-plus-2B-pretrained:
+    huggingface_url: "Salesforce/codet5p-2b"
+    tokenizer_url: "Salesforce/codet5p-2b"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-plus-770M-python-pretrained:
+    huggingface_url: "Salesforce/codet5p-770m-py"
+    tokenizer_url: "Salesforce/codet5p-770m-py"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-plus-770M-pretrained:
+    huggingface_url: "Salesforce/codet5p-770m"
+    tokenizer_url: "Salesforce/codet5p-770m"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5
+codet5-plus-220M-pretrained:
+    huggingface_url: "Salesforce/codet5p-220m"
+    tokenizer_url: "Salesforce/codet5p-220m"
+    max_source_length: 512
+    max_prediction_length: 512
+    beam_size: 5

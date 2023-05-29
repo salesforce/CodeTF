@@ -5,7 +5,7 @@ sys.path.append(str(Path(".").absolute().parent))
 from codetf.models import load_model_pipeline
 
 
-model_class = load_model_pipeline(model_name="causal-lm", task="pretrained",
+model_class = load_model_pipeline(model_name="causallm", task="pretrained",
             model_type="codegen-350M-mono", is_eval=True,
             load_in_8bit=True, weight_sharding=False)
 

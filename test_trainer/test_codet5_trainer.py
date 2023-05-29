@@ -8,9 +8,8 @@ from codetf.models import load_model_pipeline
 from codetf.performance.evaluation_metric import EvaluationMetric
 from codetf.data_utility.base_dataset import CustomDataset
 
-model_class = load_model_pipeline(model_name="codet5", task="multi-sum-pretrained",
-            model_type="base", is_eval=True,
-            load_in_8bit=False, weight_sharding=False)
+model_class = load_model_pipeline(model_name="codet5", task="pretrained",
+            model_type="plus-220M", is_eval=True)
 
 dataset = CodeXGLUEDataset(tokenizer=model_class.get_tokenizer())
 train, test, validation = dataset.load(subset="text-to-code")

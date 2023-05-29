@@ -8,9 +8,8 @@ from codetf.models import load_model_pipeline
 from codetf.performance.evaluation_metric import EvaluationMetric
 from codetf.data_utility.base_dataset import CustomDataset
 
-model_class = load_model_pipeline(model_name="causal-lm", task="pretrained",
-            model_type="codegen-350M-mono", is_eval=False,
-            load_in_8bit=False, weight_sharding=False)
+model_class = load_model_pipeline(model_name="causallm", task="pretrained",
+            model_type="codegen-350M-mono", is_eval=False)
 
 
 dataset = CodeXGLUEDataset(tokenizer=model_class.get_tokenizer())

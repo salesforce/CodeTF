@@ -4,7 +4,6 @@ sys.path.append(str(Path(".").absolute().parent))
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig
 from codetf.models.base_model import BaseModel
 from codetf.common.registry import registry
-from accelerate import Accelerator
 from collections import defaultdict
 from tqdm import tqdm
 import torch
@@ -12,7 +11,7 @@ from accelerate import init_empty_weights, load_checkpoint_and_dispatch
 from huggingface_hub import hf_hub_download
 import torch
 
-@registry.register_model("causal-lm")
+@registry.register_model("causallm")
 class CausalLMModel(BaseModel):
 
     MODEL_DICT = "configs/inference/causal_lm.yaml"
@@ -30,7 +29,7 @@ class CausalLMModel(BaseModel):
         return tokenizer
     
     @classmethod
-    def load_model_from_config(model_class, model_config, load_in_8bit=False, load_in_4bit=False, weight_sharding=True):
+    def load_model_from_config(model_class, model_config, load_in_8bit=False, load_in_4bit=False, weight_sharding=False):
         checkpoint = model_config["huggingface_url"]
 
         if load_in_8bit and load_in_4bit:

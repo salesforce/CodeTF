@@ -8,8 +8,6 @@ from codetf.models.base_model import BaseModel
 from codetf.models.seq2seq_models import Seq2SeqModel
 from codetf.models.causal_lm_models import CausalLMModel
 from codetf.models.bert_models import BertModel
-import os
-import glob
 from codetf.common.utils import get_abs_path
 
 __all__ = [
@@ -43,7 +41,7 @@ def get_model_class_name(model_name, task):
 
 def load_model_pipeline(model_name, model_type="base", task="sum",
             dataset=None, language=None, is_eval=True, 
-            load_in_8bit=False, load_in_4bit=False, weight_sharding=True):
+            load_in_8bit=False, load_in_4bit=False, weight_sharding=False):
     
     model_cls = registry.get_model_class(model_name)
     model_card = construct_model_card(model_name, model_type, task, dataset, language)

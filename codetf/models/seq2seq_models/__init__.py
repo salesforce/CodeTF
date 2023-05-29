@@ -26,7 +26,7 @@ class Seq2SeqModel(BaseModel):
     
   
     @classmethod
-    def load_model_from_config(model_class, model_config, load_in_8bit=False, load_in_4bit=False, weight_sharding=True):
+    def load_model_from_config(model_class, model_config, load_in_8bit=False, load_in_4bit=False, weight_sharding=False):
         
         checkpoint = model_config["huggingface_url"]
 

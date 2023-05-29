@@ -54,4 +54,18 @@ causallm-incoder-6B-pretrained:
     huggingface_url: "facebook/incoder-6B"
     tokenizer_url:  "facebook/incoder-6B"
     max_prediction_length: 512
-
+causallm-codegen2-1B-pretrained:
+    huggingface_url: "Salesforce/codegen2-1B"
+    tokenizer_url: "Salesforce/codegen2-1B"
+    max_prediction_length: 512
+causallm-codegen2-3.7B-pretrained:
+    huggingface_url: "Salesforce/codegen2-3_7B"
+    tokenizer_url: "Salesforce/codegen2-3_7B"
+causallm-codegen2-7B-pretrained:
+    huggingface_url: "Salesforce/codegen2-7B"
+    tokenizer_url: "Salesforce/codegen2-7B"
+    max_prediction_length: 512
+causallm-codegen2-16B-pretrained:
+    huggingface_url: "Salesforce/codegen2-16B"
+    tokenizer_url: "Salesforce/codegen2-16B"
+    max_prediction_length: 512
