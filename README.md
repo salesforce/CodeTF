@@ -6,13 +6,20 @@
     <br>
 <p>
 <div align="center">
-  <a href="https://opensource.org/licenses/BSD-3-Clause">
-  <img alt="license" src="https://img.shields.io/badge/License-BSD_3--Clause-blue.svg"/>
+  <a href="https://opensource.org/license/apache-2-0/">
+  <img alt="license" src="https://img.shields.io/badge/License-Apache%202.0-green.svg"/>
   </a>
    <a href="https://www.python.org/downloads/release/python-380/">
   <img alt="license" src="https://img.shields.io/badge/python-3.8+-blue.svg"/>
   </a> 
-  
+   <a href="https://pypi.org/project/salesforce-codetf/">
+  <img alt="license" src="https://static.pepy.tech/badge/salesforce-codetf"/>
+  </a> 
+
+<a href="https://arxiv.org">Technical Report</a>,
+<a href="https://opensource.salesforce.com/CodeTF/latest/index.html">Documentation</a>,
+<a href="https://github.com/salesforce/CodeTF/tree/main/test_inference">Examples</a>,
+    
 # CodeTF - A One-stop Transformer Library for State-of-the-art Code LLM
 
 <!-- 
@@ -26,9 +33,14 @@
   - [Installation](#installation-guide)
   - [Getting Started](#getting-started)
     - [Inferencing Pipeline](#inferencing-pipeline)
+    - [Model Zoo](#model-zoo)
     - [Fine-Tuning Your Own Model](#fine-tuning-pipeline)
     - [Evaluate On Well-Known Benchmarks](#evaluate-on-well-known-benchmarks)
     - [Utilities to Manipulate Source Code Based on AST](#code-utilities)
+        - [AST Parser in Multiple Languages](#ast-parser-in-multiple-languages)
+        - [Extract Code Attributes](#extract-code-attributes)
+        - [Remove Comments](#remove-comments)
+  - [Ethical and Responsible Use](#ethical-and-responsible-use) 
   - [License](#license)
 
 ## Introduction
