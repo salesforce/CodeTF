@@ -167,32 +167,34 @@ print(model_zoo)
 ```
 
 ### Fine-Tuning Pipeline
-Want to train a custom LLM for code? We've got you covered. Below is an example using the ``CausalLMTrainer``, along with our dataset utilities, make it easy to fine-tune your models using the CodeXGLUE dataset. Here's an example:
+Want to train a custom LLM for code? We've got you covered. Below is an example using the ``Seq2SeqTrainer`` to fine-tune a [CodeT5+ pretrained model](https://github.com/salesforce/CodeT5), along with our dataset utilities, make it easy to fine-tune your models using the CodeXGLUE dataset. Here's an example:
     
 ```python
-from codetf.trainer.causal_lm_trainer import CausalLMTrainer
+from codetf.trainer.codet5_trainer import CodeT5Seq2SeqTrainer
 from codetf.data_utility.codexglue_dataset import CodeXGLUEDataset
 from codetf.models import load_model_pipeline
-from codetf.performance.evaluate import EvaluationMetric
+from codetf.performance.evaluation_metric import EvaluationMetric
+from codetf.data_utility.base_dataset import CustomDataset
 
-model_class = load_model_pipeline(model_name="causal-lm", task="pretrained",
-                model_type="starcoder-15.5B", is_eval=False,
-                load_in_8bit=False, weight_sharding=False)
+model_class = load_model_pipeline(model_name="codet5", task="pretrained",
+            model_type="plus-220M", is_eval=True)
 
+dataset = CodeXGLUEDataset(tokenizer=model_class.get_tokenizer())
+train, test, validation = dataset.load(subset="text-to-code")
 
-dataloader = CodeXGLUEDataset(tokenizer=model_class.get_tokenizer())
-train_dataset, test_dataset, val_dataset = dataloader.load(subset="text-to-code")
+train_dataset= CustomDataset(train[0], train[1])
+test_dataset= CustomDataset(test[0], test[1])
+val_dataset= CustomDataset(validation[0], validation[1])
 
 evaluator = EvaluationMetric(metric="bleu", tokenizer=model_class.tokenizer)
 
 # peft can be in ["lora", "prefixtuning"]
-trainer = CausalLMTrainer(train_dataset=train_dataset, 
-                        validation_dataset=val_dataset, 
-                        peft=None,
-                        pretrained_model_or_path=model_class.get_model(),
-                        tokenizer=model_class.get_tokenizer())
+trainer = CodeT5Seq2SeqTrainer(train_dataset=train_dataset, 
+                                validation_dataset=val_dataset, 
+                                peft="lora",
+                                pretrained_model_or_path=model_class.get_model(),
+                                tokenizer=model_class.tokenizer)
 trainer.train()
-# trainer.evaluate(test_dataset=test_dataset)
 ```
 
 Comparing to [this script from StarCoder](https://github.com/bigcode-project/starcoder/blob/main/finetune/finetune.py), which requires ~300 LOCs to fine-tune a model, we only need 14 LOCs to do the same !!!
