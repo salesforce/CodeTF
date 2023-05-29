@@ -3,12 +3,12 @@ from pathlib import Path
 sys.path.append(str(Path(".").absolute().parent))
 from transformers import RobertaTokenizer
 from codetf.models.base_model import BaseModel
-from transformers import T5ForConditionalGeneration, T5Config
+from transformers import AutoModelForSeq2SeqLM, AutoConfig
 from codetf.common.registry import registry
 from accelerate import Accelerator
 
 @registry.register_model("codet5")
-class CodeT5Seq2SeqModel(BaseModel):
+class Seq2SeqModel(BaseModel):
     
     MODEL_DICT = "configs/inference/codet5.yaml"
      
@@ -26,14 +26,18 @@ class CodeT5Seq2SeqModel(BaseModel):
     
   
     @classmethod
-    def load_model_from_config(model_class, model_config, load_in_8bit=True, weight_sharding=True):
+    def load_model_from_config(model_class, model_config, load_in_8bit=False, load_in_4bit=False, weight_sharding=True):
         
         checkpoint = model_config["huggingface_url"]
+
+        if load_in_8bit and load_in_4bit:
+            raise ValueError("Only one of load_in_8bit or load_in_4bit can be True. Please choose one.")
+
         if weight_sharding:
             weights_location = hf_hub_download(checkpoint, "pytorch_model.bin")
-            config = T5Config.from_pretrained(checkpoint)
+            config = AutoConfig.from_pretrained(checkpoint)
             with init_empty_weights():
-                model = AutoModelForCausalLM.from_config(config)
+                model = AutoModelForSeq2SeqLM.from_config(config)
 
             model.tie_weights()            
             model = load_checkpoint_and_dispatch(
@@ -41,11 +45,15 @@ class CodeT5Seq2SeqModel(BaseModel):
             )
         else:
             if load_in_8bit:
-                model = T5ForConditionalGeneration.from_pretrained(checkpoint, 
+                model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, 
                                             load_in_8bit=load_in_8bit, 
                                             device_map="auto")
+            elif load_in_4bit:
+                model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, 
+                                            load_in_4bit=load_in_4bit, 
+                                            device_map="auto")
             else:
-                model = T5ForConditionalGeneration.from_pretrained(checkpoint, 
+                model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, 
                                             device_map="auto")
 
            
@@ -58,7 +66,7 @@ class CodeT5Seq2SeqModel(BaseModel):
         )
     
 
-    def forward_seq2seq(self, sources):
+    def forward(self, sources):
         encoding = self.tokenizer(sources, return_tensors='pt')
         input_ids = encoding.input_ids.to(self.device)
         attention_mask = encoding.attention_mask.to(self.device)
@@ -74,6 +82,6 @@ class CodeT5Seq2SeqModel(BaseModel):
         
         input_for_net = [' '.join(source.strip().split()).replace('\n', ' ') for source in sources]
         # if self.task in ["sum", "translate", "nl2code", "refine"]:
-        output = self.forward_seq2seq(input_for_net)
+        output = self.forward(input_for_net)
        
         return output

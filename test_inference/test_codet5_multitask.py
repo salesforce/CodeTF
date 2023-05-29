@@ -1,13 +1,11 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(".").absolute().parent))
-# sys.path.append("../")
-import torch
 from codetf.models import load_model_pipeline
 
 translation_model = load_model_pipeline(model_name="codet5", task="translate-cs-java",
-            model_type="base", is_eval=True,
-            load_in_8bit=True, weight_sharding=False)
+            model_type="base", is_eval=True, 
+            load_in_4bit=True, weight_sharding=False)
 
 summarization_model = load_model_pipeline(model_name="codet5", task="sum-python",
             model_type="base", is_eval=True,

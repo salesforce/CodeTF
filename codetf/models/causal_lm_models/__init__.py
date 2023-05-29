@@ -30,8 +30,12 @@ class CausalLMModel(BaseModel):
         return tokenizer
     
     @classmethod
-    def load_model_from_config(model_class, model_config, load_in_8bit=True, weight_sharding=True):
+    def load_model_from_config(model_class, model_config, load_in_8bit=False, load_in_4bit=False, weight_sharding=True):
         checkpoint = model_config["huggingface_url"]
+
+        if load_in_8bit and load_in_4bit:
+            raise ValueError("Only one of load_in_8bit or load_in_4bit can be True. Please choose one.")
+        
         if weight_sharding:
             weights_location = hf_hub_download(checkpoint, "pytorch_model.bin")
             config = AutoConfig.from_pretrained(checkpoint)
@@ -46,6 +50,10 @@ class CausalLMModel(BaseModel):
             if load_in_8bit:
                 model = AutoModelForCausalLM.from_pretrained(checkpoint, 
                                             load_in_8bit=load_in_8bit, 
+                                            device_map="auto")
+            elif load_in_4bit:
+                model = AutoModelForCausalLM.from_pretrained(checkpoint, 
+                                            load_in_4bit=load_in_4bit, 
                                             device_map="auto")
             else:
                 model = AutoModelForCausalLM.from_pretrained(checkpoint, 

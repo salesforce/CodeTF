@@ -40,12 +40,12 @@ class BaseModel(nn.Module):
         return list(self.parameters())[0].device
     
     @classmethod
-    def from_pretrained(model_class, model_card, load_in_8bit=True, weight_sharding=True):
+    def from_pretrained(model_class, model_card, load_in_8bit=False, load_in_4bit=False, weight_sharding=False):
         """
         Build a pretrained model from default configuration file, specified by model_type.
         """
         model_config = OmegaConf.load(get_abs_path(model_class.MODEL_DICT))[model_card]
-        model_cls = model_class.load_model_from_config(model_config=model_config, load_in_8bit=load_in_8bit, weight_sharding=weight_sharding)
+        model_cls = model_class.load_model_from_config(model_config=model_config, load_in_8bit=load_in_8bit, load_in_4bit=load_in_4bit, weight_sharding=weight_sharding)
 
         return model_cls
 
