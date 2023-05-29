@@ -44,7 +44,7 @@
   - [License](#license)
 
 ## Introduction
-CodeTF is a one-stop Python transformer-based library for ***code large language models (Code LLMs)*** and ***Code intelligence*** tasks., provides a seamless interface for training and inferencing on code intelligence tasks like code summarization, translation, and generation. It aims to facilitate easy integration of cutting-edge language models into real-world applications.
+CodeTF is a one-stop Python transformer-based library for ***code large language models (Code LLMs)*** and ***code intelligence***, provides a seamless interface for training and inferencing on code intelligence tasks like code summarization, translation, and generation. It aims to facilitate easy integration of cutting-edge language models into real-world applications.
 
 In addition to the core LLMs's features for code, CodeTF offers utilities for code manipulation across various languages, including easy extraction of code attributes. Using tree-sitter as its core AST parser, it enables parsing of attributes such as function names, comments, and variable names. Pre-built libraries for numerous languages are provided, eliminating the need for complicated parser setup. CodeTF thus ensures a user-friendly and accessible environment for code intelligence tasks.
 
