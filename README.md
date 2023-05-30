@@ -10,7 +10,7 @@
   <img alt="license" src="https://img.shields.io/badge/License-Apache%202.0-green.svg"/>
   </a>
    <a href="https://www.python.org/downloads/release/python-380/">
-  <img alt="license" src="https://img.shields.io/badge/python-3.8+-blue.svg"/>
+  <img alt="license" src="https://img.shields.io/badge/python-3.8+-yellow.svg"/>
   </a> 
    <a href="https://pypi.org/project/salesforce-codetf/">
   <img alt="license" src="https://static.pepy.tech/badge/salesforce-codetf"/>
