@@ -61,15 +61,19 @@ The current version of the library offers:
 
 The following table shows the supported models with sizes and the tasks that the models support. This is a continuing effort and we are working on further growing the list.
     
-| Model      | Type              | Size                                      | Tasks                                                                                      |
-|------------|-------------------|-------------------------------------------|--------------------------------------------------------------------------------------------|
-| CodeBERT   | Encoder           | Base (160M), Small (84M)                  | Pretrained, MLM                                                                            |
-| CodeGen    | Decoder           | 350M, 2B, 6B, 16B                         | Pretrained, Code Generation                                                                |
-| SantaCoder | Decoder           | 1.1B                                      | Pretrained, Code Generation                                                                |
-| StarCoder  | Decoder           | 15.5B                                     | Pretrained, Code Generation                                                                |
-| Incoder    | Decoder           | 1B, 6B                                    | Pretrained, Code Generation                                                                |
-| CodeT5     | Encoder-Decoder   | Small (125M), Medium (220M), Large (770M) | Pretrained, Code Sum, Code Generation, Code Refinement, Defect Prediction, Clone Detection |
-| CodeT5+    | Encoder-Decoder   | 220M, 770M, 2B, 6B, 16B                   | Pretrained, Code Generation                                                                |
+| Model        | Size                                                                                                                          | Tasks                                                                                                                                                                                                     |
+|--------------|-------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| CodeT5       | Base, Base-multi-sum, Base-translate-cs, Base-translate-java, Base-sum, Base-clone, Base-defect                              | Pretrained, NL to Code, Refine, Translation (CS to Java, Java to CS), Summarization (Python, Go, PHP, JavaScript, Java, Ruby), Clone detection, Defect prediction |
+| CodeT5+      | Plus-instruct-16B, Plus-16B, Plus-6B, Plus-2B, Plus-770M-python, Plus-770M, Plus-220M                                      | Pretrained, NL to Code, Refine , Defect prediction |
+| CodeGen      | Mono: 350M, 2B, 6B, 1B, 3.7B, 7B, 16B<br>Multi: 350M, 2B, 6B<br>NL: 350M, 2B                                           | Pretrained |
+| StarCoder    | 15.5B                                                                                                                         | Pretrained |
+| SantaCoder   | 1.1B                                                                                                                          | Pretrained |
+| GPT-NeoX     | 20B                                                                                                                           | Pretrained |
+| GPT-Neo      | 1.3B                                                                                                                          | Pretrained |
+| GPT-J        | 6B                                                                                                                            | Pretrained |
+| Incoder      | 6B                                                                                                                            | Pretrained |
+| CodeParrot   | Small-python (110M), Small-multi(110M), 1.5B                                                                                   | Pretrained |
+| CodeBERT     | CodeBERT-base, UnixCoder-base, CodeBERTa-small                                                                                 | Pretrained |
 
 
 ## Installation Guide
@@ -160,6 +164,10 @@ print(model_zoo)
 #                                gpt-neo-1.3B                   pretrained
 #                                gpt-j-6B                       pretrained
 #                                incoder-6B                     pretrained
+#                                codegen2-1B                    pretrained
+#                                codegen2-3.7B                  pretrained
+#                                codegen2-7B                    pretrained
+#                                codegen2-16B                   pretrained
 # codet5                         base-multi-sum                 pretrained
 #                                base                           nl2code
 #                                base                           refine
@@ -173,6 +181,13 @@ print(model_zoo)
 #                                base-sum                       ruby
 #                                base                           clone
 #                                base                           defect
+#                                plus-instruct-16B              pretrained
+#                                plus-16B                       pretrained
+#                                plus-6B                        pretrained
+#                                plus-2B                        pretrained
+#                                plus-770M-python               pretrained
+#                                plus-770M                      pretrained
+#                                plus-220M                      pretrained
 # bert                           codebert-base                  pretrained
 #                                unixcoder-base                 pretrained
 #                                codeberta-small                pretrained
