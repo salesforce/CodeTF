@@ -72,8 +72,7 @@ class CausalLMModel(BaseModel):
         input_ids = encoding.input_ids.to(self.device)
         attention_mask = encoding.attention_mask.to(self.device)
         generated_ids = self.model.generate(input_ids, attention_mask=attention_mask, 
-                                            max_length=self.max_prediction_length,
-                                            num_beams=self.beam_size)
+                                            max_length=self.max_prediction_length)
 
         predictions = self.tokenizer.batch_decode(generated_ids, truncate_before_pattern=[r"\n\n^#", "^'''", "\n\n\n"])
         return predictions
