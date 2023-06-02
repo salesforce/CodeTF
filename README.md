@@ -87,7 +87,7 @@ conda activate codetf
 
 2. Install from [PyPI](https://pypi.org/project/salesforce-codetf/):
 ```bash
-pip install salesforce-codetf
+pip install salesforce-codetf==1.0.0
 ```
     
 3. Alternatively, build CodeTF from source:
@@ -96,6 +96,18 @@ pip install salesforce-codetf
 git clone https://github.com/salesforce/CodeTF.git
 cd CodeTF
 pip install -e .
+```
+
+Additionally, to make sure the quantization feature works well, also install these dependencies:
+```bash
+pip install -q -U git+https://github.com/huggingface/transformers.git
+pip install -q -U git+https://github.com/huggingface/peft.git
+pip install -q -U git+https://github.com/huggingface/accelerate.git
+```
+
+For some models, such as [StarCoder](https://github.com/bigcode-project/starcoder), it is required to log in Huggingface. Please obtain the HuggingFace token and login:
+```
+huggingface-cli login
 ```
 
 ## Getting Started
