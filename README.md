@@ -6,13 +6,20 @@
     <br>
 <p>
 <div align="center">
-  <a href="https://opensource.org/licenses/BSD-3-Clause">
-  <img alt="license" src="https://img.shields.io/badge/License-BSD_3--Clause-blue.svg"/>
+  <a href="https://opensource.org/license/apache-2-0/">
+  <img alt="license" src="https://img.shields.io/badge/License-Apache%202.0-green.svg"/>
   </a>
    <a href="https://www.python.org/downloads/release/python-380/">
-  <img alt="license" src="https://img.shields.io/badge/python-3.8+-blue.svg"/>
+  <img alt="license" src="https://img.shields.io/badge/python-3.8+-yellow.svg"/>
   </a> 
-  
+   <a href="https://pypi.org/project/salesforce-codetf/">
+  <img alt="license" src="https://static.pepy.tech/badge/salesforce-codetf"/>
+  </a> 
+
+<a href="https://arxiv.org/pdf/2306.00029.pdf">Technical Report</a>,
+<a href="https://opensource.salesforce.com/CodeTF/latest/index.html">Documentation</a>,
+<a href="https://github.com/salesforce/CodeTF/tree/main/test_inference">Examples</a>,
+    
 # CodeTF - A One-stop Transformer Library for State-of-the-art Code LLM
 
 <!-- 
@@ -26,15 +33,20 @@
   - [Installation](#installation-guide)
   - [Getting Started](#getting-started)
     - [Inferencing Pipeline](#inferencing-pipeline)
+    - [Model Zoo](#model-zoo)
     - [Fine-Tuning Your Own Model](#fine-tuning-pipeline)
     - [Evaluate On Well-Known Benchmarks](#evaluate-on-well-known-benchmarks)
     - [Utilities to Manipulate Source Code Based on AST](#code-utilities)
+        - [AST Parser in Multiple Languages](#ast-parser-in-multiple-languages)
+        - [Extract Code Attributes](#extract-code-attributes)
+        - [Remove Comments](#remove-comments)
+  - [Ethical and Responsible Use](#ethical-and-responsible-use) 
   - [License](#license)
 
 ## Introduction
-CodeTF is a one-stop Python transformer-based library for code large language models (Code LLMs) and Code intelligence tasks., provides a seamless interface for training and inferencing on code intelligence tasks like code summarization, translation, and generation. It aims to facilitate easy integration of cutting-edge language models into real-world applications.
+CodeTF is a one-stop Python transformer-based library for ***code large language models (Code LLMs)*** and ***code intelligence***, provides a seamless interface for training and inferencing on code intelligence tasks like code summarization, translation, and generation. It aims to facilitate easy integration of cutting-edge language models into real-world applications.
 
-In addition to the core tasks, CodeTF offers utilities for code manipulation across various languages, including easy extraction of code attributes. Using tree-sitter as its core parser, it enables parsing of attributes such as function names, comments, and variable names. Pre-built libraries for numerous languages are provided, eliminating the need for complicated parser setup. CodeTF thus ensures a user-friendly and accessible environment for code intelligence tasks.
+In addition to the core LLMs's features for code, CodeTF offers utilities for code manipulation across various languages, including easy extraction of code attributes. Using tree-sitter as its core AST parser, it enables parsing of attributes such as function names, comments, and variable names. Pre-built libraries for numerous languages are provided, eliminating the need for complicated parser setup. CodeTF thus ensures a user-friendly and accessible environment for code intelligence tasks.
 
 The current version of the library offers:
 
@@ -49,15 +61,19 @@ The current version of the library offers:
 
 The following table shows the supported models with sizes and the tasks that the models support. This is a continuing effort and we are working on further growing the list.
     
-| Model      | Type              | Size                                      | Tasks                                                                                      |
-|------------|-------------------|-------------------------------------------|--------------------------------------------------------------------------------------------|
-| CodeBERT   | Encoder           | Base (160M), Small (84M)                  | Pretrained, MLM                                                                            |
-| CodeGen    | Decoder           | 350M, 2B, 6B, 16B                         | Pretrained, Code Generation                                                                |
-| SantaCoder | Decoder           | 1.1B                                      | Pretrained, Code Generation                                                                |
-| StarCoder  | Decoder           | 15.5B                                     | Pretrained, Code Generation                                                                |
-| Incoder    | Decoder           | 1B, 6B                                    | Pretrained, Code Generation                                                                |
-| CodeT5     | Encoder-Decoder   | Small (125M), Medium (220M), Large (770M) | Pretrained, Code Sum, Code Generation, Code Refinement, Defect Prediction, Clone Detection |
-| CodeT5+    | Encoder-Decoder   | 220M, 770M, 2B, 6B, 16B                   | Pretrained, Code Generation                                                                |
+| Model        | Size                                                                                                                          | Tasks                                                                                                                                                                                                     |
+|--------------|-------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| CodeT5       | Base, Base-multi-sum, Base-translate-cs, Base-translate-java, Base-sum, Base-clone, Base-defect                              | Pretrained, NL to Code, Refine, Translation (CS to Java, Java to CS), Summarization (Python, Go, PHP, JavaScript, Java, Ruby), Clone detection, Defect prediction |
+| CodeT5+      | Plus-instruct-16B, Plus-16B, Plus-6B, Plus-2B, Plus-770M-python, Plus-770M, Plus-220M                                      | Pretrained, NL to Code, Refine , Defect prediction |
+| CodeGen      | Mono: 350M, 2B, 6B, 1B, 3.7B, 7B, 16B<br>Multi: 350M, 2B, 6B<br>NL: 350M, 2B                                           | Pretrained |
+| StarCoder    | 15.5B                                                                                                                         | Pretrained |
+| SantaCoder   | 1.1B                                                                                                                          | Pretrained |
+| GPT-NeoX     | 20B                                                                                                                           | Pretrained |
+| GPT-Neo      | 1.3B                                                                                                                          | Pretrained |
+| GPT-J        | 6B                                                                                                                            | Pretrained |
+| Incoder      | 6B                                                                                                                            | Pretrained |
+| CodeParrot   | Small-python (110M), Small-multi(110M), 1.5B                                                                                   | Pretrained |
+| CodeBERT     | CodeBERT-base, UnixCoder-base, CodeBERTa-small                                                                                 | Pretrained |
 
 
 ## Installation Guide
@@ -71,7 +87,7 @@ conda activate codetf
 
 2. Install from [PyPI](https://pypi.org/project/salesforce-codetf/):
 ```bash
-pip install codetf
+pip install salesforce-codetf
 ```
     
 3. Alternatively, build CodeTF from source:
@@ -148,6 +164,10 @@ print(model_zoo)
 #                                gpt-neo-1.3B                   pretrained
 #                                gpt-j-6B                       pretrained
 #                                incoder-6B                     pretrained
+#                                codegen2-1B                    pretrained
+#                                codegen2-3.7B                  pretrained
+#                                codegen2-7B                    pretrained
+#                                codegen2-16B                   pretrained
 # codet5                         base-multi-sum                 pretrained
 #                                base                           nl2code
 #                                base                           refine
@@ -161,6 +181,13 @@ print(model_zoo)
 #                                base-sum                       ruby
 #                                base                           clone
 #                                base                           defect
+#                                plus-instruct-16B              pretrained
+#                                plus-16B                       pretrained
+#                                plus-6B                        pretrained
+#                                plus-2B                        pretrained
+#                                plus-770M-python               pretrained
+#                                plus-770M                      pretrained
+#                                plus-220M                      pretrained
 # bert                           codebert-base                  pretrained
 #                                unixcoder-base                 pretrained
 #                                codeberta-small                pretrained
