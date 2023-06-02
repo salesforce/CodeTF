@@ -16,7 +16,7 @@
   <img alt="license" src="https://static.pepy.tech/badge/salesforce-codetf"/>
   </a> 
 
-<a href="https://arxiv.org">Technical Report</a>,
+<a href="https://arxiv.org/pdf/2306.00029.pdf">Technical Report</a>,
 <a href="https://opensource.salesforce.com/CodeTF/latest/index.html">Documentation</a>,
 <a href="https://github.com/salesforce/CodeTF/tree/main/test_inference">Examples</a>,
     
