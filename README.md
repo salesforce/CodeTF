@@ -95,7 +95,7 @@ pip install salesforce-codetf
 ```bash
 git clone https://github.com/salesforce/CodeTF.git
 cd CodeTF
-pip install -e .
+pip install .
 ```
 
 ## Getting Started
