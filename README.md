@@ -171,14 +171,14 @@ print(model_zoo)
 # codet5                         base-multi-sum                 pretrained
 #                                base                           nl2code
 #                                base                           refine
-#                                base-translate-cs              java
-#                                base-translate-java            cs
-#                                base-sum                       python
-#                                base-sum                       go
-#                                base-sum                       php
-#                                base-sum                       javascript
-#                                base-sum                       java
-#                                base-sum                       ruby
+#                                base                           translate_cs_java
+#                                base                           translate_java_cs
+#                                base                           sum_python
+#                                base                           sum_go
+#                                base                           sum_php
+#                                base                           sum_javascript
+#                                base                           sum_java
+#                                base                           sum_ruby
 #                                base                           clone
 #                                base                           defect
 #                                plus-instruct-16B              pretrained
