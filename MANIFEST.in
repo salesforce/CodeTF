@@ -1,0 +1,1 @@
+recursive-include codetf/configs *.yaml
