@@ -13,4 +13,4 @@ code_snippet = "def print_hello_world():"
 embeddings = model.predict([code_snippet])
 
 # embedding of "code_snippet"
-print(code_snippets)
+print(embeddings)
