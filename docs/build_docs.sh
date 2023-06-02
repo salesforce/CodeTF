@@ -49,7 +49,7 @@ rm -rf "${DIRNAME}/_build/html/${current_version}/.doctrees"
 # and use them to build the appropriate API docs.
 # Uninstall after we're done with each one.
 # versions=()
-# checkout_files=("${DIRNAME}/*.rst" "lavis" "tutorials" "setup.py")
+# checkout_files=("${DIRNAME}/*.rst" "codetf" "tutorials" "setup.py")
 # for version in $(git tag --list 'v[0-9]*'); do
 #     versions+=("$version")
 #     git checkout -b "${version}_local_docs_only"
