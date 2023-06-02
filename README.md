@@ -50,7 +50,7 @@ In addition to the core LLMs's features for code, CodeTF offers utilities for co
 
 The current version of the library offers:
 
-- **Fast Model Serving**: We support an easy-to-use interface for rapid inferencing with **pre-quantized models** (int8, int16, float16).
+- **Fast Model Serving**: We support an easy-to-use interface for rapid inferencing with **pre-quantized models** (int8, int16, float16). CodeTF handles all aspects of device management, so users do not have to worry about that aspect. If your model is large, we offer advanced features such as weight sharding across GPUs to serve the models more quickly.
 - **Fine-Tuning Your Own Models**: We provide an API for quickly fine-tuning your own LLMs for code using SOTA techniques for **parameter-efficient fine-tuning** (HuggingFace PEFT) on distributed environments.
 - **Supported Tasks**: nl2code, code summarization, code completion, code translation, code refinement, clone detection, defect prediction.
 - **Datasets+**: We have preprocessed well-known benchmarks (**Human-Eval, MBPP, CodeXGLUE, APPS, etc.**) and offer an easy-to-load feature for these datasets.
