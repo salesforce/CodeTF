@@ -120,7 +120,7 @@ from codetf.models import load_model_pipeline
 
 code_generation_model = load_model_pipeline(model_name="codet5", task="pretrained",
             model_type="plus-220M", is_eval=True,
-            load_in_8bit=True, weight_sharding=False)
+            load_in_8bit=True, load_in_4bit=False, weight_sharding=False)
             
 result = code_generation_model.predict(["def print_hello_world():"])
 print(result)
@@ -128,7 +128,7 @@ print(result)
 There are a few notable arguments that need to be considered:
 -  ``model_name``: the name of the model, currently support ``codet5`` and ``causal-lm``. 
 -  ``model_type``: type of model for each model name, e.g. ``base``, ``codegen-350M-mono``, ``j-6B``, etc.
--  ``load_in_8bit``: inherit the ``load_in_8bit" feature from [Huggingface Quantization](https://huggingface.co/docs/transformers/main/main_classes/quantization).
+-  ``load_in_8bit`` and ``load_in_4bit``: inherit the dynamic quantization feature from [Huggingface Quantization](https://huggingface.co/docs/transformers/main/main_classes/quantization).
 -  ``weight_sharding``: our advance feature that leverages [HuggingFace Sharded Checkpoint](https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch) to split a large model in several smaller shards in different GPUs. Please consider using this if you are dealing with large models.
 
 ### Model Zoo
