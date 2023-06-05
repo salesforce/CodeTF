@@ -71,6 +71,7 @@ The following table shows the supported models with sizes and the tasks that the
 | GPT-NeoX     | 20B                                                                                                                           | Pretrained |
 | GPT-Neo      | 1.3B                                                                                                                          | Pretrained |
 | GPT-J        | 6B                                                                                                                            | Pretrained |
+| RWKV        | 169M, 430M, 1.5B, 3B, 7B, 14B 14B                                                                                                                            | Pretrained |
 | Incoder      | 6B                                                                                                                            | Pretrained |
 | CodeParrot   | Small-python (110M), Small-multi(110M), 1.5B                                                                                   | Pretrained |
 | CodeBERT     | CodeBERT-base, UnixCoder-base, CodeBERTa-small                                                                                 | Pretrained |
