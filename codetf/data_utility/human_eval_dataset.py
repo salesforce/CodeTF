@@ -26,7 +26,7 @@ class HumanEvalDataset(BaseDataset):
             unit_test = re.sub(r'METADATA = {[^}]*}', '', unit_test, flags=re.MULTILINE)
             references.append(unit_test)
 
-        prompt_token_ids, prompt_attention_masks = self.process_data(prompts, use_max_length=True, padding="max_length")
+        prompt_token_ids, prompt_attention_masks = self.process_data(prompts, padding="max_length")
         
         return prompt_token_ids, prompt_attention_masks, references
     
