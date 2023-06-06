@@ -69,9 +69,7 @@ class ModelEvaluator:
                     for item in gen_codes:
                         cleaned =  remove_last_block(item)
                         solutions_per_chunk.append(cleaned)
-                    
-                    print("Solutions per chunk : ", solutions_per_chunk)
-                    
+                                        
             solutions.append(solutions_per_chunk)
             dataloader_pbar.set_description(f"Processing step {step+1}/{len(data_loader)}")
             

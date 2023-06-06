@@ -2,18 +2,7 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(".").absolute().parent))
 from codetf.models import load_model_pipeline
-from codetf.data_utility.util import EOF_STRINGS, EndOfFunctionCriteria, remove_last_block
-from torch.utils.data.dataloader import DataLoader
-from transformers import StoppingCriteriaList
 from codetf.data_utility.human_eval_dataset import HumanEvalDataset
-import torch
-import os
-from accelerate import Accelerator
-import torch
-from collections import defaultdict
-from tqdm import tqdm
-import torch
-from evaluate import load
 from codetf.performance.model_evaluator import ModelEvaluator
 from torch.utils.data import TensorDataset
 

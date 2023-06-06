@@ -1,10 +1,6 @@
 
 
-import torch
-import torch.nn.functional as F
 from datasets import load_dataset
-from codetf.data_utility.base_dataset import BaseDataset,CustomDataset
-from torch.utils.data import TensorDataset
 
 class CodeXGLUEDataset(BaseDataset):
 

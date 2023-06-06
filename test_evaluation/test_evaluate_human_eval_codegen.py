@@ -4,6 +4,7 @@ sys.path.append(str(Path(".").absolute().parent))
 from codetf.models import load_model_pipeline
 from codetf.data_utility.human_eval_dataset import HumanEvalDataset
 from codetf.performance.model_evaluator import ModelEvaluator
+from torch.utils.data import TensorDataset
 
 os.environ["HF_ALLOW_CODE_EVAL"] = "1"
 os.environ["TOKENIZERS_PARALLELISM"] = "true"

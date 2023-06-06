@@ -1,1 +1,2 @@
 recursive-include codetf/configs *.yaml
+recursive-include codetf/tree-sitter-prebuilts *.so
