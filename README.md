@@ -348,7 +348,7 @@ CodeTF, while powerful, does not guarantee infallible code intelligence capabili
 However, misuse can lead to unethical outcomes such as unauthorized code manipulation, privacy breaches, or insecure coding practices. Users should familiarize themselves with guidelines for responsible AI before using CodeTF. Our commitment is to continually refine the library by identifying and mitigating potential biases and inappropriate behaviors. Users should review the models and system before practical implementation, and contribute towards refining the library to ensure ethical usage.
 
 ## Technical Report and Citing CodeTF
-You can find more details in our [technical report](https://arxiv.org).
+You can find more details in our [technical report](https://arxiv.org/abs/2306.00029).
 
 If you're using CodeTF in your research or applications, please cite using this BibTeX:
 ```bibtex
