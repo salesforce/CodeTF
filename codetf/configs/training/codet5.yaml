@@ -22,7 +22,7 @@ hyperparameters:
   weight_decay: 0.001
   run_name: "CodeT5-seq2seq-fine-tuned"
   ddp_find_unused_parameters: False
-  fp16: True
+  fp16: False
   bf16: False
   auto_find_batch: True
   num_workers: 4
