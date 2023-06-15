@@ -1,5 +1,7 @@
 from transformers import AutoModelForCausalLM
 from codetf.trainer.base_trainer import BaseTrainer
+from peft import get_peft_model, prepare_model_for_int8_training
+
 
 class CausalLMTrainer(BaseTrainer):    
     def __init__(self, train_dataset, validation_dataset=None, tokenizer=None, 
