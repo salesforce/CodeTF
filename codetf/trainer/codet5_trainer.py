@@ -41,6 +41,8 @@ class CodeT5Seq2SeqTrainer(BaseTrainer):
             self.model = prepare_model_for_int8_training(self.model)
             if peft == "lora":
                 peft_config = self.get_default_lora_config_for_codet5()
+            elif peft == "prefixtuning":
+                peft_config = self.get_default_prefixtuning_config_for_codet5()
             self.model.enable_input_require_grads()
             self.model = get_peft_model(self.model, peft_config)
             self.model.print_trainable_parameters()

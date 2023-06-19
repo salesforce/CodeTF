@@ -1,4 +1,4 @@
-
+from codetf.data_utility.base_dataset import BaseDataset
 
 from datasets import load_dataset
 
@@ -14,13 +14,13 @@ class CodeXGLUEDataset(BaseDataset):
             'code-refinement': self.load_codexglue_code_refinement_dataset
         }
     
-    def load(self, subset):
+    def load(self, subset, *args, **kwargs):
         if subset in self.load_funcs:
-            return self.load_funcs[subset]()
+            return self.load_funcs[subset](*args, **kwargs)
         else:
             raise ValueError(f'Invalid subset {subset}. Available subsets are: {list(self.load_funcs.keys())}')
 
-    def load_codexglue_text_to_code_dataset(self):
+    def load_codexglue_text_to_code_dataset(self, *args, **kwargs):
         dataset = self.dataset_config["codexglue_text_to_code"]
         dataset = load_dataset(dataset)
 
@@ -38,9 +38,9 @@ class CodeXGLUEDataset(BaseDataset):
 
         return (train_nl_tensors, train_code_tensors), (test_nl_tensors, test_code_tensors), (validation_nl_tensors, validation_code_tensors)
     
-    def load_codexglue_code_to_text_dataset(self):
+    def load_codexglue_code_to_text_dataset(self, config, *args, **kwargs):
         dataset = self.dataset_config["codexglue_code_to_text"]
-        dataset = load_dataset(dataset)
+        dataset = load_dataset(dataset, config)
 
         train = dataset["train"]
         train_code_tensors, _ = self.process_data(train["code"])
@@ -56,7 +56,7 @@ class CodeXGLUEDataset(BaseDataset):
 
         return (train_code_tensors, train_docstring_tensors), (test_code_tensors, test_docstring_tensors), (validation_code_tensors, validation_docstring_tensors)
 
-    def load_codexglue_java_to_csharp_dataset(self):
+    def load_codexglue_java_to_csharp_dataset(self, *args, **kwargs):
         dataset = self.dataset_config["codexglue_java_to_csharp"]
         dataset = load_dataset(dataset)
 
@@ -74,7 +74,7 @@ class CodeXGLUEDataset(BaseDataset):
 
         return (train_java_tensors, train_csharp_tensors), (test_java_tensors, test_csharp_tensors), (validation_java_tensors, validation_csharp_tensors)
 
-    def load_codexglue_code_refinement_dataset(self):
+    def load_codexglue_code_refinement_dataset(self, *args, **kwargs):
         dataset = self.dataset_config["codexglue_code_refinement"]
         dataset = load_dataset(dataset)
 
