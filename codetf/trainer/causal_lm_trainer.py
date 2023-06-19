@@ -7,10 +7,7 @@ class CausalLMTrainer(BaseTrainer):
     def __init__(self, train_dataset, validation_dataset=None, tokenizer=None, 
                 checkpoints_path="./checkpoints", pretrained_model_or_path="gpt2", 
                 training_args=None, evaluator=None, evaluation_fn=None, peft=None):
-        
-        # model = AutoModelForCausalLM.from_pretrained(pretrained_model_or_path)
-        
-       
+            
             
         super().__init__(pretrained_model_or_path, tokenizer, train_dataset, validation_dataset,
                         checkpoints_path, pretrained_model_or_path,

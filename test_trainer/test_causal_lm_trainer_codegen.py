@@ -9,8 +9,7 @@ from codetf.performance.evaluation_metric import EvaluationMetric
 from codetf.data_utility.base_dataset import CustomDataset
 
 model_class = load_model_pipeline(model_name="causallm", task="pretrained",
-            model_type="codegen-350M-mono", is_eval=False)
-
+            model_type="codegen-350M-mono", is_eval=False, load_in_8bit=True)
 
 dataset = CodeXGLUEDataset(tokenizer=model_class.get_tokenizer())
 train, test, validation = dataset.load(subset="text-to-code")
@@ -24,6 +23,7 @@ evaluator = EvaluationMetric(metric="bleu", tokenizer=model_class.tokenizer)
 # peft can be in ["lora", "prefixtuning"]
 trainer = CausalLMTrainer(train_dataset=train_dataset, 
                         validation_dataset=val_dataset, 
+                        checkpoints_path="./checkpoints",
                         peft=None,
                         pretrained_model_or_path=model_class.get_model(),
                         tokenizer=model_class.get_tokenizer())
