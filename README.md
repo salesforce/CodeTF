@@ -22,11 +22,13 @@
     
 # CodeTF - A One-stop Transformer Library for State-of-the-art Code LLM
 
-<!-- 
-[![Code License](https://img.shields.io/badge/Code%20License-Apache_2.0-green.svg)](https://github.com/bdqnghi/CodeTF_personal/blob/main/LICENSE)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) -->
- </div>   
+## What's New: 🎉 
+* [v1.0.2] Jun 2023, Update more samples with scripts to fine-tune custom models
+  - Fix bugs on Evaluation Metrics
+  - Fix bugs on model loading (CodeT5Plus)
+  - Refine prediction methods to avoid repetitive predictions.
+  - Add scripts to host model and can be interact with OpenAI API.
+
     
 ## Table of Contents
   - [Introduction](#introduction)
