@@ -87,7 +87,6 @@ class CausalLMModel(BaseModel):
         generated_ids = self.model.generate(**encoding, 
                                             max_length=max_length)
 
-        print(generated_ids)
         predictions = self.tokenizer.batch_decode(generated_ids, truncate_before_pattern=[r"\n\n^#", "^'''", "\n\n\n"])
         return predictions
 

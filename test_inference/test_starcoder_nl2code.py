@@ -8,7 +8,7 @@ model = load_model_pipeline(model_name="causallm", task="pretrained",
             model_type="starcoder-15.5B", is_eval=True,
             load_in_8bit=True, weight_sharding=False)
 
-prompts = "# this function prints hello world"
+prompts = "def print_hello_world():"
 code_snippets = model.predict([prompts])
 
 print(code_snippets)
