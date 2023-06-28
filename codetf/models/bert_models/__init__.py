@@ -37,7 +37,17 @@ class BertModel(BaseModel):
             raise ValueError("Only one of load_in_8bit or load_in_4bit can be True. Please choose one.")
         
         if weight_sharding:
-            weights_location = hf_hub_download(checkpoint, "pytorch_model.bin")
+            try:
+                # Try to download and load the json index file
+                weights_location = hf_hub_download(checkpoint, "pytorch_model.bin")
+            except Exception:
+                try:
+                    # If that fails, try to download and load the bin file
+                    weights_location = hf_hub_download(checkpoint, "pytorch_model.bin.index.json")
+                except Exception as e:
+                    # If both fail, raise an error
+                    raise Exception(f"Failed to download weights: {str(e)}")
+                    
             config = RobertaConfig.from_pretrained(checkpoint)
             with init_empty_weights():
                 model = RobertaModel.from_config(config)

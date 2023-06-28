@@ -26,7 +26,7 @@ class ModelEvaluator:
                         top_p=0.95, k=[1,10,100], 
                         num_return_sequences=200, sequences_per_chunk=10, num_workers=1):
         # Load dataset
-        data_loader = DataLoader(problems, batch_size=batch_size)
+        data_loader = Dat aLoader(problems, batch_size=batch_size)
         data_loader = self.accelerator.prepare(data_loader)
         
         # Initialize stopping criteria
@@ -69,31 +69,13 @@ class ModelEvaluator:
                     for item in gen_codes:
                         cleaned =  remove_last_block(item)
                         solutions_per_chunk.append(cleaned)
-                                        
+
             solutions.append(solutions_per_chunk)
             dataloader_pbar.set_description(f"Processing step {step+1}/{len(data_loader)}")
-            
-        # Compute pass@k for each solution
-        pass_at_k_list = []
-        passk_pbar = tqdm(enumerate(solutions), total=len(solutions))
-        for i, solution in passk_pbar:
-            pass_at_k, _ = self.code_eval.compute(
-                references=[unit_tests[i]], predictions=[solution], k=k, num_workers=num_workers
-            )
-            passk_pbar.set_description(f"Evaluating solution {i+1}/{len(solutions)}")
-            passk_pbar.set_postfix({"Current pass_at_k": pass_at_k})
-            pass_at_k_list.append(pass_at_k)
+        
 
-        # Initialize dictionary for average pass@k based on the first pass_at_k dict
-        avg_pass_at_k = {key: 0 for key in pass_at_k_list[0].keys()}
+        pass_at_k, _ = self.code_eval.compute(
+            references=unit_tests, predictions=solutions, k=k, num_workers=num_workers
+        )
 
-        # Compute average pass@k for each k in k
-        for pass_at_k in pass_at_k_list:
-            for key in avg_pass_at_k.keys():
-                avg_pass_at_k[key] += pass_at_k[key]
-
-        # Divide sum by count to get average
-        for key in avg_pass_at_k.keys():
-            avg_pass_at_k[key] /= len(pass_at_k_list)
-
-        return avg_pass_at_k
+        return pass_at_k

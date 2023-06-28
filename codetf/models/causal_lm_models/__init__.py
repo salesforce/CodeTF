@@ -36,7 +36,17 @@ class CausalLMModel(BaseModel):
             raise ValueError("Only one of load_in_8bit or load_in_4bit can be True. Please choose one.")
         
         if weight_sharding:
-            weights_location = hf_hub_download(checkpoint, "pytorch_model.bin")
+            try:
+                # Try to download and load the json index file
+                weights_location = hf_hub_download(checkpoint, "pytorch_model.bin")
+            except Exception:
+                try:
+                    # If that fails, try to download and load the bin file
+                    weights_location = hf_hub_download(checkpoint, "pytorch_model.bin.index.json")
+                except Exception as e:
+                    # If both fail, raise an error
+                    raise Exception(f"Failed to download weights: {str(e)}")
+                    
             config = AutoConfig.from_pretrained(checkpoint)
             with init_empty_weights():
                 model = AutoModelForCausalLM.from_config(config)
@@ -49,13 +59,16 @@ class CausalLMModel(BaseModel):
             if load_in_8bit:
                 model = AutoModelForCausalLM.from_pretrained(checkpoint, 
                                             load_in_8bit=load_in_8bit, 
+                                            low_cpu_mem_usage=True,
                                             device_map="auto")
             elif load_in_4bit:
                 model = AutoModelForCausalLM.from_pretrained(checkpoint, 
                                             load_in_4bit=load_in_4bit, 
+                                            low_cpu_mem_usage=True,
                                             device_map="auto")
             else:
                 model = AutoModelForCausalLM.from_pretrained(checkpoint, 
+                                            low_cpu_mem_usage=True,
                                             device_map="auto")
 
 
@@ -67,17 +80,17 @@ class CausalLMModel(BaseModel):
             tokenizer=tokenizer
         )
    
-    def forward(self, sources):
-        encoding = self.tokenizer(sources, return_tensors='pt')
-        input_ids = encoding.input_ids.to(self.device)
-        attention_mask = encoding.attention_mask.to(self.device)
-        generated_ids = self.model.generate(input_ids, attention_mask=attention_mask, 
-                                            max_length=self.max_prediction_length)
+    def forward(self, sources, max_length=512):
+        encoding = self.tokenizer(sources, return_tensors='pt').to(self.model.device)
+        # input_ids = encoding.input_ids.to(self.device)
+        # attention_mask = encoding.attention_mask.to(self.device)
+        generated_ids = self.model.generate(**encoding, 
+                                            max_length=max_length)
 
         predictions = self.tokenizer.batch_decode(generated_ids, truncate_before_pattern=[r"\n\n^#", "^'''", "\n\n\n"])
         return predictions
 
-    def predict(self, sources):
+    def predict(self, sources, max_length=512):
         input_for_net = [' '.join(source.strip().split()).replace('\n', ' ') for source in sources]
-        output = self.forward(input_for_net)
+        output = self.forward(input_for_net, max_length=512)
         return output
