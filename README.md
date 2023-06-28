@@ -22,13 +22,7 @@
     
 # CodeTF - A One-stop Transformer Library for State-of-the-art Code LLM
 
-## What's New: 🎉 
-* [v1.0.2] Jun 2023, Update more samples with scripts to fine-tune custom models
-  - Fix bugs on Evaluation Metrics
-  - Fix bugs on model loading (CodeT5Plus)
-  - Refine prediction methods to avoid repetitive predictions.
-  - Add scripts to host model and can be interact with OpenAI API.
-    
+
 ## Table of Contents
   - [Introduction](#introduction)
   - [Installation](#installation-guide)
