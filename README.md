@@ -21,6 +21,12 @@
 <a href="https://github.com/salesforce/CodeTF/tree/main/test_inference">Examples</a>,
     
 # CodeTF - A One-stop Transformer Library for State-of-the-art Code LLM
+
+<!-- 
+[![Code License](https://img.shields.io/badge/Code%20License-Apache_2.0-green.svg)](https://github.com/bdqnghi/CodeTF_personal/blob/main/LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/release/python-390/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) -->
+ </div>   
     
 ## Table of Contents
   - [Introduction](#introduction)
