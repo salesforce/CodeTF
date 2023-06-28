@@ -81,12 +81,13 @@ class CausalLMModel(BaseModel):
         )
    
     def forward(self, sources, max_length=512):
-        encoding = self.tokenizer(sources, return_tensors='pt').to(self.model.device)
+        encoding = self.tokenizer(sources, return_tensors='pt').to(self.device)
         # input_ids = encoding.input_ids.to(self.device)
         # attention_mask = encoding.attention_mask.to(self.device)
         generated_ids = self.model.generate(**encoding, 
                                             max_length=max_length)
 
+        print(generated_ids)
         predictions = self.tokenizer.batch_decode(generated_ids, truncate_before_pattern=[r"\n\n^#", "^'''", "\n\n\n"])
         return predictions
 
