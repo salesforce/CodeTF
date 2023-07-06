@@ -26,7 +26,7 @@ class ModelEvaluator:
                         top_p=0.95, k=[1,10,100], 
                         num_return_sequences=200, sequences_per_chunk=10, num_workers=1):
         # Load dataset
-        data_loader = Dat aLoader(problems, batch_size=batch_size)
+        data_loader = DataLoader(problems, batch_size=batch_size)
         data_loader = self.accelerator.prepare(data_loader)
         
         # Initialize stopping criteria
