@@ -69,3 +69,27 @@ causallm-codegen2-16B-pretrained:
     huggingface_url: "Salesforce/codegen2-16B"
     tokenizer_url: "Salesforce/codegen2-16B"
     max_prediction_length: 512
+causallm-rwkv-169M-pretrained:
+    huggingface_url: "RWKV/rwkv-4-169m-pile"
+    tokenizer_url:  "RWKV/rwkv-4-169m-pile"
+    max_prediction_length: 512
+causallm-rwkv-430M-pretrained:
+    huggingface_url: "RWKV/rwkv-4-430m-pile"
+    tokenizer_url:  "RWKV/rwkv-4-430m-pile"
+    max_prediction_length: 512
+causallm-rwkv-1.5B-pretrained:
+    huggingface_url: "RWKV/rwkv-raven-1b5"
+    tokenizer_url:  "RWKV/rwkv-raven-1b5"
+    max_prediction_length: 512
+causallm-rwkv-3B-pretrained:
+    huggingface_url: "RWKV/rwkv-raven-3b"
+    tokenizer_url:  "RWKV/rwkv-raven-3b"
+    max_prediction_length: 512
+causallm-rwkv-7B-pretrained:
+    huggingface_url: "RWKV/rwkv-raven-7b"
+    tokenizer_url:  "RWKV/rwkv-raven-7b"
+    max_prediction_length: 512
+causallm-rwkv-14B-pretrained:
+    huggingface_url: "RWKV/rwkv-raven-14b"
+    tokenizer_url:  "RWKV/rwkv-raven-14b"
+    max_prediction_length: 512

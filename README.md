@@ -71,6 +71,7 @@ The following table shows the supported models with sizes and the tasks that the
 | GPT-NeoX     | 20B                                                                                                                           | Pretrained |
 | GPT-Neo      | 1.3B                                                                                                                          | Pretrained |
 | GPT-J        | 6B                                                                                                                            | Pretrained |
+| RWKV        | 169M, 430M, 1.5B, 3B, 7B, 14B                                                                                                                            | Pretrained |
 | Incoder      | 6B                                                                                                                            | Pretrained |
 | CodeParrot   | Small-python (110M), Small-multi(110M), 1.5B                                                                                   | Pretrained |
 | CodeBERT     | CodeBERT-base, UnixCoder-base, CodeBERTa-small                                                                                 | Pretrained |
@@ -157,6 +158,12 @@ print(model_zoo)
 #                                codegen2-3.7B                  pretrained
 #                                codegen2-7B                    pretrained
 #                                codegen2-16B                   pretrained
+#                                rwkv-169M                      pretrained
+#                                rwkv-430M                      pretrained
+#                                rwkv-1.5B                      pretrained
+#                                rwkv-3B                        pretrained
+#                                rwkv-7B                        pretrained
+#                                rwkv-14B                       pretrained
 # codet5                         base-multi-sum                 pretrained
 #                                base                           nl2code
 #                                base                           refine
