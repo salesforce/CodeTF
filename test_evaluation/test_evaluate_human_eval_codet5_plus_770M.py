@@ -9,10 +9,10 @@ import os
 
 os.environ["HF_ALLOW_CODE_EVAL"] = "1"
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
-model_class = load_model_pipeline(model_name="causallm", task="pretrained",
-            model_type="codegen-350M-multi", is_eval=True,
-            load_in_8bit=True, weight_sharding=False)
+model_class = load_model_pipeline(model_name="codet5", task="pretrained",
+            model_type="plus-770M-python", is_eval=True)
 
 dataset = HumanEvalDataset(tokenizer=model_class.get_tokenizer())
 prompt_token_ids, prompt_attention_masks, references= dataset.load()
@@ -20,6 +20,5 @@ prompt_token_ids, prompt_attention_masks, references= dataset.load()
 problems = TensorDataset(prompt_token_ids, prompt_attention_masks)
 
 evaluator = ModelEvaluator(model_class)
-avg_pass_at_k = evaluator.evaluate_pass_k(problems=problems, unit_tests=references, sequences_per_chunk=200, num_workers=5)
+avg_pass_at_k = evaluator.evaluate_pass_k(problems=problems, unit_tests=references, sequences_per_chunk=20, num_workers=10)
 print("Pass@k: ", avg_pass_at_k)
-
