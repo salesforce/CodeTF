@@ -22,7 +22,8 @@ install_requires = [
   "tqdm==4.63.0",
   "transformers==4.30.2",
   "tree-sitter==0.20.1",
-  "bitsandbytes==0.39.1"
+  "bitsandbytes==0.39.1",
+  "evaluate==0.4.0"
 ]
 
 DEPENDENCY_LINKS = []
@@ -33,7 +34,7 @@ DEPENDENCY_LINKS.append("git+https://github.com/huggingface/peft.git")
     
 setup(
   name = 'salesforce-codetf',
-  version = "1.0.2",
+  version = "1.0.2.2",
   py_modules = ['codetf'],
   description = 'CodeTF: A Transformer-based Library for Code Intelligence',
   author = 'Nghi D. Q. Bui',
