@@ -6,9 +6,6 @@ hyperparameters:
   num_train_epochs: 10
   auto_find_batch_size: True
   batch_size: 4
-  max_steps: 1000
-  eval_steps: 100
-  save_steps: 1000
   logging_steps: 100
   per_device_train_batch_size: 8
   per_device_eval_batch_size: 8
@@ -30,3 +27,4 @@ hyperparameters:
   beam_size: 5
   max_grad_norm: 5.0
   adam_epsilon : 1e-06
+  load_best_model_at_end: True
