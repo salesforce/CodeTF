@@ -1,4 +1,6 @@
 from codetf.code_utility.language_specific_utility import LanguageSpecificUtility
+import lizard
+import re
 
 class ApexCodeUtility(LanguageSpecificUtility):
     def __init__(self):
@@ -104,3 +106,17 @@ class ApexCodeUtility(LanguageSpecificUtility):
     def get_code_attributes(self, code_snippet):
         tree = self.parse(code_snippet)
         return self.extract_attributes(tree, code_snippet)
+
+    def get_function_content_from_line(self, file_content, line_number):
+        file_content_lines = file_content.split("\n")
+        i = lizard.analyze_file.analyze_source_code("AllTests.java", file_content)
+        
+        function_content = None
+        # print(len(i.function_list))
+        for function_dict in i.function_list:
+            function_dict = function_dict.__dict__
+            if line_number >= function_dict["start_line"] and line_number <= function_dict["end_line"]:
+                function_content_lines = file_content_lines[function_dict["start_line"]-1:function_dict["end_line"]]
+                function_content = "\n".join(function_content_lines)
+                break
+        return function_content

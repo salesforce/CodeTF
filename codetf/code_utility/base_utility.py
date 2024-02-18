@@ -1,5 +1,7 @@
 from .ast_parser import ASTParser
-import pyparsing
+import lizard
+import re
+
 class BaseUtility():
 
     def __init__(self, language: str):
@@ -22,3 +24,14 @@ class BaseUtility():
         
         code_snippet = commentFilter.transformString(code_snippet)
         return code_snippet
+
+
+    def get_method_name(self, function_text):
+        first_line = function_text.splitlines()[0]
+        match = re.search(r"(?<=\s)\w+(?=\()", first_line)
+        function_name = None
+        if match:
+            function_name = match.group()
+        
+        return function_name
+
