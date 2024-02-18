@@ -7,8 +7,8 @@ causallm-codegen-350M-multi-pretrained:
     tokenizer_url: "Salesforce/codegen-350M-multi"
     max_prediction_length: 512
 causallm-codegen-350M-nl-pretrained:
-    huggingface_url: "Salesforce/codegen-350-nl"
-    tokenizer_url: "Salesforce/codegen-350-nl"
+    huggingface_url: "Salesforce/codegen-350M-nl"
+    tokenizer_url: "Salesforce/codegen-350M-nl"
     max_prediction_length: 512
 causallm-codegen-2B-mono-pretrained:
     huggingface_url: "Salesforce/codegen-2B-mono"

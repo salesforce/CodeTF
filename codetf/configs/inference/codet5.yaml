@@ -140,7 +140,7 @@ codet5-plus-770M-python-pretrained:
     max_prediction_length: 512
     beam_size: 5
     trust_remote_code: False
-    device_map: True
+    device_map: False
 codet5-plus-770M-pretrained:
     huggingface_url: "Salesforce/codet5p-770m"
     tokenizer_url: "Salesforce/codet5p-770m"
@@ -148,7 +148,7 @@ codet5-plus-770M-pretrained:
     max_prediction_length: 512
     beam_size: 5
     trust_remote_code: False
-    device_map: True
+    device_map: False
 codet5-plus-220M-pretrained:
     huggingface_url: "Salesforce/codet5p-220m"
     tokenizer_url: "Salesforce/codet5p-220m"
@@ -156,4 +156,4 @@ codet5-plus-220M-pretrained:
     max_prediction_length: 512
     beam_size: 5
     trust_remote_code: False
-    device_map: True
+    device_map: False

@@ -51,6 +51,13 @@ def load_model_pipeline(model_name, model_type="base", task="sum",
 
     return model
 
+def load_model_from_path(checkpoint_path, tokenizer_path, model_name, is_eval=True, load_in_8bit=False, load_in_4bit=False):
+    model_cls = registry.get_model_class(model_name)
+    model = model_cls.from_custom(checkpoint_path=checkpoint_path, tokenizer_path=tokenizer_path, load_in_8bit=load_in_8bit, load_in_4bit=load_in_4bit)
+    if is_eval:
+        model.eval()
+
+    return model
 
 class ModelZoo:
     def __init__(self, config_files):

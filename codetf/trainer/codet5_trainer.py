@@ -38,6 +38,7 @@ class CodeT5Seq2SeqTrainer(BaseTrainer):
         self.trainer = self.init_trainer()
 
         if peft:
+            self.peft = peft
             self.model = prepare_model_for_int8_training(self.model)
             if peft == "lora":
                 peft_config = self.get_default_lora_config_for_codet5()

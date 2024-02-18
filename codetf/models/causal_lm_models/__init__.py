@@ -29,7 +29,7 @@ class CausalLMModel(BaseModel):
         return tokenizer
     
     @classmethod
-    def load_model_from_config(model_class, model_config, load_in_8bit=False, load_in_4bit=False, weight_sharding=False):
+    def load_huggingface_model_from_config(model_class, model_config, load_in_8bit=False, load_in_4bit=False, weight_sharding=False):
         checkpoint = model_config["huggingface_url"]
 
         if load_in_8bit and load_in_4bit:
@@ -73,6 +73,35 @@ class CausalLMModel(BaseModel):
 
 
         tokenizer = model_class.init_tokenizer(model_config["tokenizer_url"])
+        
+        return model_class(
+            model=model,
+            model_config=model_config,
+            tokenizer=tokenizer
+        )
+
+    @classmethod
+    def load_custom_model(model_class, checkpoint_path, tokenizer_path, load_in_8bit=False, load_in_4bit=False):
+
+        if load_in_8bit and load_in_4bit:
+            raise ValueError("Only one of load_in_8bit or load_in_4bit can be True. Please choose one.")
+        
+        if load_in_8bit:
+            model = AutoModelForCausalLM.from_pretrained(checkpoint_path, 
+                                        load_in_8bit=load_in_8bit, 
+                                        low_cpu_mem_usage=True,
+                                        device_map="auto")
+        elif load_in_4bit:
+            model = AutoModelForCausalLM.from_pretrained(checkpoint_path, 
+                                        load_in_4bit=load_in_4bit, 
+                                        low_cpu_mem_usage=True,
+                                        device_map="auto")
+        else:
+            model = AutoModelForCausalLM.from_pretrained(checkpoint_path, 
+                                        low_cpu_mem_usage=True,
+                                        device_map="auto")
+
+        tokenizer = model_class.init_tokenizer(tokenizer_path)
         
         return model_class(
             model=model,

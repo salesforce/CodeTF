@@ -21,3 +21,4 @@ tqdm==4.63.0
 transformers==4.30.2
 tree-sitter==0.20.1
 bitsandbytes==0.39.1
+evaluate==0.4.0

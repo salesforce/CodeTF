@@ -45,7 +45,17 @@ class BaseModel(nn.Module):
         Build a pretrained model from default configuration file, specified by model_type.
         """
         model_config = OmegaConf.load(get_abs_path(model_class.MODEL_DICT))[model_card]
-        model_cls = model_class.load_model_from_config(model_config=model_config, load_in_8bit=load_in_8bit, load_in_4bit=load_in_4bit, weight_sharding=weight_sharding)
+        model_cls = model_class.load_huggingface_model_from_config(model_config=model_config, load_in_8bit=load_in_8bit, load_in_4bit=load_in_4bit, weight_sharding=weight_sharding)
+
+        return model_cls
+    
+
+    @classmethod
+    def from_custom(model_class, checkpoint_path, tokenizer_path, load_in_8bit=False, load_in_4bit=False):
+        """
+        Build a pretrained model from default configuration file, specified by model_type.
+        """
+        model_cls = model_class.load_custom_model(checkpoint_path, tokenizer_path, load_in_8bit=load_in_8bit, load_in_4bit=load_in_4bit)
 
         return model_cls
 

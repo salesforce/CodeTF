@@ -25,6 +25,7 @@ class CodeXGLUEDataset(BaseDataset):
         dataset = load_dataset(dataset)
 
         train = dataset["train"]
+        train = train[:50]
         train_nl_tensors, _ = self.process_data(train["nl"])
         train_code_tensors, _ = self.process_data(train["code"])
         

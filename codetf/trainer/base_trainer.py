@@ -52,6 +52,7 @@ class BaseTrainer():
 
     def train(self):
         self.trainer.train()
+        # self.trainer.save_model(self.checkpoints_path)
     
     def evaluate(self, dataset=None):
         self.trainer.evaluate(dataset)
@@ -70,8 +71,10 @@ class BaseTrainer():
             sharded_ddp=hyperparameters_config["sharded_ddp"],
             logging_steps=hyperparameters_config["logging_steps"],
             evaluation_strategy=hyperparameters_config["evaluation_strategy"],
+            save_strategy=hyperparameters_config["save_strategy"],
             gradient_checkpointing=hyperparameters_config["gradient_checkpointing"],
             auto_find_batch_size=hyperparameters_config["auto_find_batch_size"],
+            load_best_model_at_end=hyperparameters_config["load_best_model_at_end"],
             output_dir=self.checkpoints_path
         )
         # return hyperparameters_config
@@ -91,8 +94,10 @@ class BaseTrainer():
             sharded_ddp=hyperparameters_config["sharded_ddp"],
             logging_steps=hyperparameters_config["logging_steps"],
             evaluation_strategy=hyperparameters_config["evaluation_strategy"],
+            save_strategy=hyperparameters_config["save_strategy"],
             gradient_checkpointing=hyperparameters_config["gradient_checkpointing"],
             auto_find_batch_size=hyperparameters_config["auto_find_batch_size"],
+            load_best_model_at_end=hyperparameters_config["load_best_model_at_end"],
             output_dir=self.checkpoints_path
         )
         # return hyperparameters_config
