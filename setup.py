@@ -20,7 +20,7 @@ install_requires = [
   "torch==2.0.1",
   "torchvision==0.15.2",
   "tqdm==4.63.0",
-  "transformers==4.30.2",
+  "transformers==4.36.0",
   "tree-sitter==0.20.1",
   "bitsandbytes==0.39.1",
   "evaluate==0.4.0"
