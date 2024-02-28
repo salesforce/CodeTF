@@ -51,7 +51,7 @@ In addition to the core LLMs's features for code, CodeTF offers utilities for co
 The current version of the library offers:
 
 - **Fast Model Serving**: We support an easy-to-use interface for rapid inferencing with **pre-quantized models** (int8, int16, float16). CodeTF handles all aspects of device management, so users do not have to worry about that aspect. If your model is large, we offer advanced features such as weight sharding across GPUs to serve the models more quickly.
-- **Fine-Tuning Your Own Models**: We provide an API for quickly fine-tuning your own LLMs for code using SOTA techniques for **parameter-efficient fine-tuning** (HuggingFace PEFT) on distributed environments.
+- **Fine-Tuning Your Own Models**: We provide an API for quickly fine-tuning your own LLMs for code using SOTA techniques for **parameter-efficient fine-tuning** (Hugging Face PEFT) on distributed environments.
 - **Supported Tasks**: nl2code, code summarization, code completion, code translation, code refinement, clone detection, defect prediction.
 - **Datasets+**: We have preprocessed well-known benchmarks (**Human-Eval, MBPP, CodeXGLUE, APPS, etc.**) and offer an easy-to-load feature for these datasets.
 - **Model Evaluator**: We provide interface to evaluate models on well-known benchmarks (e.g. Human-Eval) on popular metrics (e.g., pass@k) with little effort (**~15 LOCs**).
@@ -105,7 +105,7 @@ pip install -q -U git+https://github.com/huggingface/peft.git
 pip install -q -U git+https://github.com/huggingface/accelerate.git
 ```
 
-For some models, such as [StarCoder](https://github.com/bigcode-project/starcoder), it is required to log in Huggingface. Please obtain the HuggingFace token and login:
+For some models, such as [StarCoder](https://github.com/bigcode-project/starcoder), it is required to log in Hugging Face. Please obtain the Hugging Face token and login:
 ```
 huggingface-cli login
 ```
@@ -128,8 +128,8 @@ print(result)
 There are a few notable arguments that need to be considered:
 -  ``model_name``: the name of the model, currently support ``codet5`` and ``causal-lm``. 
 -  ``model_type``: type of model for each model name, e.g. ``base``, ``codegen-350M-mono``, ``j-6B``, etc.
--  ``load_in_8bit`` and ``load_in_4bit``: inherit the dynamic quantization feature from [Huggingface Quantization](https://huggingface.co/docs/transformers/main/main_classes/quantization).
--  ``weight_sharding``: our advance feature that leverages [HuggingFace Sharded Checkpoint](https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch) to split a large model in several smaller shards in different GPUs. Please consider using this if you are dealing with large models.
+-  ``load_in_8bit`` and ``load_in_4bit``: inherit the dynamic quantization feature from [Hugging Face Quantization](https://huggingface.co/docs/transformers/main/main_classes/quantization).
+-  ``weight_sharding``: our advance feature that leverages [Hugging Face Sharded Checkpoint](https://huggingface.co/docs/accelerate/v0.19.0/en/package_reference/big_modeling#accelerate.load_checkpoint_and_dispatch) to split a large model in several smaller shards in different GPUs. Please consider using this if you are dealing with large models.
 
 ### Model Zoo
 You might want to view all of the supported models. To do this, you can use the ``model_zoo()``:
@@ -240,7 +240,7 @@ avg_pass_at_k = evaluator.evaluate_pass_k(problems=problems, unit_tests=referenc
 print("Pass@k: ", avg_pass_at_k)
 ```
 
-Comparing to [this script from HuggingFace](https://github.com/huggingface/transformers/blob/main/examples/research_projects/codeparrot/scripts/human_eval.py), which requires ~230 LOCs to evaluate on pass@k, we only need 14 LOCs to do the same !!!
+Comparing to [this script from Hugging Face](https://github.com/huggingface/transformers/blob/main/examples/research_projects/codeparrot/scripts/human_eval.py), which requires ~230 LOCs to evaluate on pass@k, we only need 14 LOCs to do the same !!!
 
 ### Loading Preprocessed Data
 CodeTF provides the Dataset utility for several well-known datasets, such as CodeXGLUE, Human Eval, MBPP, and APPS. The following is an example of how to load the CodeXGLUE dataset:  
@@ -339,7 +339,7 @@ You can find more examples for each use case:
 - [Code Utility](https://github.com/salesforce/CodeTF/tree/main/test_code_utilities)
 
 ## Notes
-- CodeTF is designed to complement and enhance the capabilities of [HuggingFace Transformers](https://huggingface.co/docs/transformers/index), rather than replace it. It serves as a specialized layer specifically tailored for code intelligence tasks, such as fine-tuning language models with code-specific features and evaluating on well-known code intelligence benchmarks. If users require more customization, they are encouraged to write their own training code from scratch.
+- CodeTF is designed to complement and enhance the capabilities of [Hugging Face Transformers](https://huggingface.co/docs/transformers/index), rather than replace it. It serves as a specialized layer specifically tailored for code intelligence tasks, such as fine-tuning language models with code-specific features and evaluating on well-known code intelligence benchmarks. If users require more customization, they are encouraged to write their own training code from scratch.
 - CodeTF leverages the powerful functionality provided by [Accelerate](https://github.com/huggingface/accelerate) for both inference and training. With Accelerate, users do not need to manually manage GPUs or CPU devices for most operations, allowing for a streamlined and efficient workflow.
 
 ## Ethical and Responsible Use
